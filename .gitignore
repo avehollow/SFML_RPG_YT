@@ -15,7 +15,7 @@
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
-[Rr]elease/
+
 [Rr]eleases/
 x64/
 x86/
@@ -328,3 +328,5 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+SFML-2.5.1/
+Source/Release/
