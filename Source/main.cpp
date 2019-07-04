@@ -1,11 +1,10 @@
-#include <iostream>
-#include "imgui/imgui.h"
-#include "imgui-sfml/imgui-SFML.h"
-#include "SFML/Graphics.hpp"
-#include <memory>
+#include "Game.h"
+
 
 int main()
 {
-	
+	Game theGame;
+	theGame.Run();
+
 	return 0;
 }
