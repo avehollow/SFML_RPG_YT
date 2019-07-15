@@ -1,12 +1,6 @@
 #pragma once
 
-#include "imgui/imgui.h"
-#include "imgui-sfml/imgui-SFML.h"
-#include "SFML/Graphics.hpp"
-
-#include <iostream>
-#include <memory>
-#include <string>
+#include "GameState.h"
 
 using UINT = unsigned int;
 
@@ -32,15 +26,22 @@ public:
 
 private:
 	void InitMainWindow();
+	void InitStates();
+	void InitKeys();
 	void CalcFrameTime();
+	void EndApplication();
 
 private:
-	std::unique_ptr<sf::RenderWindow> main_window;
-	sf::Event sfEvent;
+	unique_ptr<sf::RenderWindow>      main_window;
+	sf::Event						  sfEvent;
 
-	std::wstring window_title = L"SFML_RPG_YT";
+	std::wstring					  window_title = L"SFML_RPG_YT";
 
-	sf::Clock frame_clock;
-	float frame_time = 0.0;
+	sf::Clock						  frame_clock;
+	float							  frame_time = 0.0f;
+
+	std::stack<unique_ptr<State>>	  states;
+
+	std::map<std::string, int>		  supported_keys;
 };
 
