@@ -17,14 +17,17 @@ Entity::Entity()
 Entity::~Entity()
 {
 	//HACK
-	std::cout << "Destructor" << __func__ << "\n"; // State::~State()\n";
+	std::cout << "Destructor " << __func__ << "\n"; // State::~State()\n";
 }
 
 void Entity::Update(const float& frame_time)
 {
 }
 
-void Entity::Render(sf::RenderTarget* window)
+void Entity::Render(sf::RenderTarget* target)
 {
-	window->draw(shape);
+	if (!target) return;
+
+
+		target->draw(shape);
 }

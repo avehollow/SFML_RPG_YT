@@ -1,8 +1,8 @@
 #include "State.h"
 
-State::State(sf::RenderWindow* window, std::map<std::string, int>* supported_keys)
+State::State(shared_ptr<sf::RenderTarget> target, std::map<std::string, int>* supported_keys)
 {
-	this->window		 = window;
+	this->window		 = target;
 	this->supported_keys = supported_keys;
 }
 

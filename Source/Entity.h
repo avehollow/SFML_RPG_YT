@@ -17,6 +17,7 @@ using std::shared_ptr;
 using std::weak_ptr;
 
 using std::make_unique;
+using std::make_shared;
 using std::string;
 
 
@@ -35,8 +36,8 @@ public:
 	Entity();
 	virtual ~Entity();
 
-	virtual void Update(const float& frame_time)		   ;// = 0;
-	virtual void Render(sf::RenderTarget* window = nullptr);// = 0;
+	virtual void Update(const float& frame_time)		    ;// = 0;
+	virtual void Render(sf::RenderTarget* target = nullptr) ;// = 0;
 
 };
 

@@ -8,7 +8,7 @@ private:
 	Entity player;
 
 public:
-	GameState(sf::RenderWindow* window, std::map<std::string, int>* supported_keys);
+	GameState(shared_ptr<sf::RenderTarget> target, std::map<std::string, int>* supported_keys);
 	virtual ~GameState();
 
 	void EndState()     override;

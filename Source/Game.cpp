@@ -73,14 +73,14 @@ void Game::UpdateSFMLEvents()
 
 void Game::InitMainWindow()
 {
-	main_window = make_unique<sf::RenderWindow>(sf::VideoMode(WIDTH_1280, HEIGHT_800), window_title.c_str(), sf::Style::Titlebar | sf::Style::Close);
+	main_window = make_shared<sf::RenderWindow>(sf::VideoMode(WIDTH_1280, HEIGHT_800), window_title.c_str(), sf::Style::Titlebar | sf::Style::Close);
 	main_window->setFramerateLimit(120);
 	main_window->setVerticalSyncEnabled(false);
 }
 
 void Game::InitStates()
 {
-	states.push(make_unique<GameState>(main_window.get(), &supported_keys));
+	states.push(make_unique<GameState>(main_window, &supported_keys));
 }
 
 void Game::InitKeys()

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "GameState.h"
 
 using UINT = unsigned int;
@@ -32,7 +31,7 @@ private:
 	void EndApplication();
 
 private:
-	unique_ptr<sf::RenderWindow>      main_window;
+	shared_ptr<sf::RenderWindow>      main_window;
 	sf::Event						  sfEvent;
 
 	std::wstring					  window_title = L"SFML_RPG_YT";

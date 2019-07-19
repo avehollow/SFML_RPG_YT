@@ -1,8 +1,8 @@
 #include "GameState.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
-GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supported_keys)
-	: State(window, supported_keys)
+GameState::GameState(shared_ptr<sf::RenderTarget> target, std::map<std::string, int>* supported_keys)
+	: State(target, supported_keys)
 {
 	this->InitKeybinds();
 }
@@ -49,12 +49,6 @@ void GameState::InitKeybinds()
 		//HACK MessageBox ?
 	}
 	ifs.close();
-
-	/*current_keybinds["MOVE_LEFT"]   = supported_keys->at("A");
-	current_keybinds["MOVE_RIGHT"]  = supported_keys->at("D");
-	current_keybinds["MOVE_UP"]		= supported_keys->at("W");
-	current_keybinds["MOVE_DOWN"]   = supported_keys->at("S");
-	current_keybinds["QUIT"]        = supported_keys->at("Escape");*/
 }								 
 
 void GameState::UpdateInput(const float& frame_time)
