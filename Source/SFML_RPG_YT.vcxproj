@@ -156,6 +156,9 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="State.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Config\keybinds.ini" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

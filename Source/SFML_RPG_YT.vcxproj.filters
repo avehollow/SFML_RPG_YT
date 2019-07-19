@@ -43,6 +43,9 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{596e3222-0ef7-4af4-bbeb-6b5f38096fc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{4b097a90-c235-41e5-a0e5-3f35e9b07ff3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -57,5 +60,10 @@
     <ClInclude Include="Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Config\keybinds.ini">
+      <Filter>Config</Filter>
+    </Text>
   </ItemGroup>
 </Project>

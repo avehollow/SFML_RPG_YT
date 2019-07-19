@@ -10,6 +10,7 @@
 #include <vector>
 #include <map>
 #include <stack>
+#include <fstream>
 
 using std::unique_ptr;
 using std::shared_ptr;

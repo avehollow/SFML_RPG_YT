@@ -14,38 +14,66 @@ GameState::~GameState()
 
 void GameState::EndState()
 {
+	std::ofstream ofs("Config/keybinds.ini");
+	if (ofs.is_open())
+	{
+		ofs << "MOVE_LEFT "			 << current_keybinds["MOVE_LEFT"]
+			<< "\n" << "MOVE_RIGHT " << current_keybinds["MOVE_RIGHT"]
+			<< "\n" << "MOVE_UP "    << current_keybinds["MOVE_UP"]
+			<< "\n" << "MOVE_DOWN "  << current_keybinds["MOVE_DOWN"]
+			<< "\n" << "QUIT "       << current_keybinds["QUIT"];
+	}
+	ofs.close();
 }
-
 void GameState::CheckForQuit()
 {
 	State::CheckForQuit();
 }
 
+
+
 void GameState::InitKeybinds()
 {
-	keybinds.emplace("MOVE_LEFT",  supported_keys->at("A"));
-	keybinds.emplace("MOVE_RIGHT", supported_keys->at("D"));
-	keybinds.emplace("MOVE_UP",    supported_keys->at("W"));
-	keybinds.emplace("MOVE_DOWN",  supported_keys->at("S"));
-}
+	std::ifstream ifs("Config/keybinds.ini");
+	if (ifs.is_open())
+	{
+		std::string name_action;
+		int key;
+		while (ifs >> name_action >> key)
+		{
+			current_keybinds[name_action] = key;
+		}
+	}
+	else
+	{
+		//HACK MessageBox ?
+	}
+	ifs.close();
+
+	/*current_keybinds["MOVE_LEFT"]   = supported_keys->at("A");
+	current_keybinds["MOVE_RIGHT"]  = supported_keys->at("D");
+	current_keybinds["MOVE_UP"]		= supported_keys->at("W");
+	current_keybinds["MOVE_DOWN"]   = supported_keys->at("S");
+	current_keybinds["QUIT"]        = supported_keys->at("Escape");*/
+}								 
 
 void GameState::UpdateInput(const float& frame_time)
 {
 	this->CheckForQuit();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("MOVE_LEFT"))))
 	{
 		this->player.move(frame_time, -1.0f, 0.0f);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("MOVE_RIGHT"))))
 	{
 		this->player.move(frame_time, +1.0f, 0.0f);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("MOVE_UP"))))
 	{
 		this->player.move(frame_time, 0.0f, -1.0f);
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("MOVE_DOWN"))))
 	{
 		this->player.move(frame_time, 0.0f, +1.0f);
 	}

@@ -7,7 +7,7 @@ class State
 protected:
 	sf::RenderTarget*			window		   = nullptr;
 	std::map<string, int>*		supported_keys = nullptr;
-	std::map<string, int>		keybinds;
+	std::map<string, int>		current_keybinds;
 	std::vector<sf::Texture>    textures;
 	
 
