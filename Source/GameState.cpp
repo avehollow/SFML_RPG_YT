@@ -1,10 +1,11 @@
 #include "GameState.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
-GameState::GameState(shared_ptr<sf::RenderTarget> target, std::map<std::string, int>* supported_keys)
-	: State(target, supported_keys)
+GameState::GameState(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys)
+	: State(window, supported_keys)
 {
 	this->InitKeybinds();
+
 }
 
 GameState::~GameState()
@@ -49,7 +50,12 @@ void GameState::InitKeybinds()
 		//HACK MessageBox ?
 	}
 	ifs.close();
-}								 
+}
+
+void GameState::UpdateMousePos()
+{
+	State::UpdateMousePos();
+}
 
 void GameState::UpdateInput(const float& frame_time)
 {
@@ -75,11 +81,12 @@ void GameState::UpdateInput(const float& frame_time)
 
 void GameState::Update(const float& frame_time)
 {
+	this->UpdateMousePos();
 	this->UpdateInput(frame_time);
 	player.Update(frame_time);
 }
 
-void GameState::Render(sf::RenderTarget* target)
+void GameState::Render(sf::RenderWindow* target)
 {
 	player.Render(target);
 }

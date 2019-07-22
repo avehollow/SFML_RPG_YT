@@ -1,5 +1,6 @@
 #pragma once
-#include "GameState.h"
+
+#include "MainMenu.h"
 
 using UINT = unsigned int;
 
@@ -42,5 +43,8 @@ private:
 	std::stack<unique_ptr<State>>	  states;
 
 	std::map<std::string, int>		  supported_keys;
+
+
+	bool temp = false;
 };
 

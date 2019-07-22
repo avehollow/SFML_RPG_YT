@@ -22,9 +22,12 @@ void Game::Update()
 		states.top()->Update(frame_time);
 
 		if (states.top()->GetQuitFlag())
+		//if(temp)
 		{
 			states.top()->EndState();
 			states.pop();
+
+			temp = false;
 		}
 	}
 	else
@@ -67,6 +70,8 @@ void Game::UpdateSFMLEvents()
 	{
 		if (sfEvent.type == sf::Event::Closed)
 			main_window->close();
+		/*if (sfEvent.type == sf::Event::KeyReleased && sfEvent.key.code == sf::Keyboard::P)
+			std::cout << "Ajajjajajj\r";*/
 
 	}
 }
@@ -80,7 +85,10 @@ void Game::InitMainWindow()
 
 void Game::InitStates()
 {
-	states.push(make_unique<GameState>(main_window, &supported_keys));
+	//Before ->> STATE constructor have &weak_ptr as 1 parametr and we cant pass as argument a shared_ptr because shared is not can be ref to weak_ptr
+	//weak_ptr<sf::RenderWindow> window = main_window;
+	states.push(make_unique<MainMenu> (main_window, &supported_keys));
+	//states.push(make_unique<GameState>(main_window, &supported_keys));
 }
 
 void Game::InitKeys()
