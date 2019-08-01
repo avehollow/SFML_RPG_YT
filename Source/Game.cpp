@@ -7,10 +7,10 @@ Game::Game()
 
 Game::~Game()
 {
-	while (!states.empty())
-	{
-		states.pop();
-	}
+	//while (!states.empty())
+	//{
+	//	states.pop();
+	//}
 }
 
 void Game::Update()
@@ -22,12 +22,9 @@ void Game::Update()
 		states.top()->Update(frame_time);
 
 		if (states.top()->GetQuitFlag())
-		//if(temp)
 		{
 			states.top()->EndState();
 			states.pop();
-
-			temp = false;
 		}
 	}
 	else
@@ -70,15 +67,36 @@ void Game::UpdateSFMLEvents()
 	{
 		if (sfEvent.type == sf::Event::Closed)
 			main_window->close();
-		/*if (sfEvent.type == sf::Event::KeyReleased && sfEvent.key.code == sf::Keyboard::P)
-			std::cout << "Ajajjajajj\r";*/
 
 	}
 }
 
 void Game::InitMainWindow()
 {
-	main_window = make_shared<sf::RenderWindow>(sf::VideoMode(WIDTH_1280, HEIGHT_800), window_title.c_str(), sf::Style::Titlebar | sf::Style::Close);
+	sf::ContextSettings window_settings;
+	window_settings.antialiasingLevel = 16;
+
+	if (!bFullscreen)
+	{
+		main_window = make_shared<sf::RenderWindow>(
+														sf::VideoMode(WIDTH_1280, HEIGHT_800),
+														window_title.c_str(),
+														sf::Style::Titlebar | sf::Style::Close,
+														window_settings
+													);
+	}
+	else
+	{
+		main_window = make_shared<sf::RenderWindow>(
+														sf::VideoMode(WIDTH_1920, HEIGHT_1080),
+														window_title.c_str(),
+														sf::Style::Titlebar | sf::Style::Close | sf::Style::Fullscreen,
+														window_settings
+													);
+
+	}
+	
+
 	main_window->setFramerateLimit(120);
 	main_window->setVerticalSyncEnabled(false);
 }
@@ -87,8 +105,7 @@ void Game::InitStates()
 {
 	//Before ->> STATE constructor have &weak_ptr as 1 parametr and we cant pass as argument a shared_ptr because shared is not can be ref to weak_ptr
 	//weak_ptr<sf::RenderWindow> window = main_window;
-	states.push(make_unique<MainMenu> (main_window, &supported_keys));
-	//states.push(make_unique<GameState>(main_window, &supported_keys));
+	states.push(make_unique<MainMenu> (main_window, &supported_keys, &states));
 }
 
 void Game::InitKeys()

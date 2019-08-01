@@ -5,20 +5,26 @@
 class MainMenu : public State
 {
 private:
-	sf::RectangleShape background;
+	sf::RectangleShape background_s;
+	sf::Texture		   background_t;
 
 	sf::Font font_dosis;
 
-	unique_ptr<Button> button;
+	std::map<string, unique_ptr<Button>> buttons;
 public:
-	MainMenu(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys);
+	MainMenu(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~MainMenu();
 
+	void InitButtons();
+	void UpdateButtons(const float& frame_time);
+	void RenderButtons(sf::RenderWindow* window = nullptr);
+
+
+	void InitBackground();
 	void InitFonts();
-	void EndState()       override;
-	void CheckForQuit()   override;
-	void InitKeybinds()   override;
-	void UpdateMousePos() override;
+	void EndState()								 override;
+	void InitKeybinds()							 override;
+	void UpdateMousePos()						 override;
 
 	void UpdateInput(const float& frame_time)		  override;
 	void Update(const float& frame_time)			  override;

@@ -10,15 +10,16 @@ Button::Button(float x, float y, float widht, float height, string text, sf::Fon
 	this->text.setString(text);
 	this->text.setFillColor(sf::Color::White);
 	this->text.setCharacterSize(15);
+	this->text.setStyle(sf::Text::Bold);
 
 	this->text.setPosition(
-		this->shape.getPosition().x + shape.getGlobalBounds().width / 2.0f - this->text.getGlobalBounds().width  / 2.0f ,
-		this->shape.getPosition().y + shape.getGlobalBounds().height / 2.0f - this->text.getGlobalBounds().height / 2.0f
+		this->shape.getPosition().x + shape.getGlobalBounds().width  / 2.0f - this->text.getGlobalBounds().width  / 2.0f ,
+		this->shape.getPosition().y + shape.getGlobalBounds().height / 2.0f - this->text.getGlobalBounds().height / 2.0f - 3 // -3 for precision
 	);
 
 
-	this->idle_color   = idle_color;
-	this->hover_color  = hover_color;
+	this->idle_color    = idle_color;
+	this->hover_color   = hover_color;
 	this->pressed_color = active_color;
 
 
@@ -26,39 +27,42 @@ Button::Button(float x, float y, float widht, float height, string text, sf::Fon
 
 Button::~Button()
 {
-	std::cout << "Destructor " << __func__ << "\n";
+	std::cout << "Destructor " << __func__ <<" "<< static_cast<string>(text.getString()) <<  "\n";
 }
 
-void Button::Update(sf::Vector2f mouse_pos)
+void Button::Update(sf::Vector2f mouse_pos, const float& frame_time)
 {
 	STATE = STATES::BTN_IDLE;
-
-	if (shape.getGlobalBounds().contains(mouse_pos))
+	if (clock.getElapsedTime().asSeconds() >= 0.1f * frame_time)
 	{
-		STATE = STATES::BTN_HOVER;
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		if (shape.getGlobalBounds().contains(mouse_pos))
 		{
-			STATE = STATES::BTN_PRESSED;
+			STATE = STATES::BTN_HOVER;
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				STATE = STATES::BTN_PRESSED;
+			}
 		}
+		clock.restart();
 	}
-		
-	switch (STATE)
-	{
-	case Button::STATES::BTN_IDLE:
-		shape.setFillColor(idle_color);
-		break;
 
-	case Button::STATES::BTN_PRESSED:
-		shape.setFillColor(pressed_color);
-		break;
+		switch (STATE)
+		{
+		case Button::STATES::BTN_IDLE:
+			shape.setFillColor(idle_color);
+			break;
 
-	case Button::STATES::BTN_HOVER:
-		shape.setFillColor(hover_color);
-		break;
+		case Button::STATES::BTN_PRESSED:
+			shape.setFillColor(pressed_color);
+			break;
 
-	default:
-		break;
-	}
+		case Button::STATES::BTN_HOVER:
+			shape.setFillColor(hover_color);
+			break;
+
+		default:
+			break;
+		}
 
 }
 

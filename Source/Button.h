@@ -26,6 +26,8 @@ private:
 	sf::Color hover_color;
 	sf::Color pressed_color;
 
+	sf::Clock clock;
+
 	STATES    STATE = STATES::BTN_IDLE;
 public:
 	Button(
@@ -35,14 +37,14 @@ public:
 		float height,
 		string  text,
 		sf::Font* font,
-		sf::Color idle_color   = sf::Color::Blue,
-		sf::Color hover_color  = sf::Color::Green, 
-		sf::Color active_color = sf::Color::Red
+		sf::Color idle_color   = sf::Color(75,  75,  75,  255),  //dark  grey
+		sf::Color hover_color  = sf::Color(145, 145, 145, 255),  //light grey
+		sf::Color active_color = sf::Color(150, 0,   0,   255)   //dark  red
 	);
 
 	virtual ~Button();
 
-	void Update(sf::Vector2f mouse_pos);
+	void Update(sf::Vector2f mouse_pos, const float& frame_time);
 	void Render(sf::RenderWindow* window);
 
 

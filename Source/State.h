@@ -1,14 +1,16 @@
 #pragma once
-#include "Entity.h"
+#include "Player.h"
 
 class State
 {
 protected:
+	stack<unique_ptr<State>>*	    states; // Only acces pointer to a normal variable (nodynamic)
 	shared_ptr<sf::RenderWindow>	window;
 
-	std::map<string, int>*		    supported_keys = nullptr;
-	std::map<string, int>		    current_keybinds;
-	std::vector<sf::Texture>        textures;
+	map<string, int>*				supported_keys = nullptr;
+	map<string, int>				current_keybinds;
+	map<string, sf::Texture>        textures;
+	map<string, sf::Sprite>         sprites;
 	
 	sf::Vector2i mouse_pos_screen;
 	sf::Vector2i mouse_pos_window;
@@ -18,17 +20,14 @@ protected:
 
 	bool bQuit = false;
 
-
-
 public:
-	State(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys);
+	State(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~State();
 
 	const bool& GetQuitFlag()const {
 		return bQuit;
 	};
 
-	virtual void CheckForQuit();
 
 	virtual void UpdateMousePos();
 	virtual void EndState()									  = 0;

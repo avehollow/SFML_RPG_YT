@@ -45,6 +45,6 @@ private:
 	std::map<std::string, int>		  supported_keys;
 
 
-	bool temp = false;
+	bool bFullscreen = true;
 };
 
