@@ -26,6 +26,10 @@ private:
 	sf::Color hover_color;
 	sf::Color pressed_color;
 
+	sf::Color idle_text_color;
+	sf::Color hover_text_color;
+	sf::Color pressed_text_color;
+
 	sf::Clock clock;
 
 	STATES    STATE = STATES::BTN_IDLE;
@@ -37,9 +41,12 @@ public:
 		float height,
 		string  text,
 		sf::Font* font,
-		sf::Color idle_color   = sf::Color(75,  75,  75,  255),  //dark  grey
-		sf::Color hover_color  = sf::Color(145, 145, 145, 255),  //light grey
-		sf::Color active_color = sf::Color(150, 0,   0,   255)   //dark  red
+		sf::Color idle_text_color   = sf::Color(75, 75, 75, 255),		  //dark  grey
+		sf::Color hover_text_color  = sf::Color(145, 145, 145, 255),      //light grey
+		sf::Color active_text_color = sf::Color(150, 0, 0, 255),		  //dark  red
+		sf::Color idle_color   = sf::Color(75,  75,  75,  0),   //dark  grey
+		sf::Color hover_color  = sf::Color(145, 145, 145, 0),   //light grey
+		sf::Color active_color = sf::Color(150, 0,   0,   0)    //dark  red
 	);
 
 	virtual ~Button();

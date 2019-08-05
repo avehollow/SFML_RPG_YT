@@ -42,9 +42,10 @@ void MainMenu::InitFonts()
 
 void MainMenu::InitButtons()
 {
-	buttons["New Game"]		  = make_unique<Button>(150, 450, 150, 50, "New Game",		 &this->font_dosis);
-	buttons["Options"]        = make_unique<Button>(150, 550, 150, 50, "Options",        &this->font_dosis);
-	buttons["Quit"]			  = make_unique<Button>(150, 850, 150, 50, "Quit",			 &this->font_dosis);
+	buttons["New Game"]		  = make_unique<Button>(120, 320, 150, 50, "New Game",		 &this->font_dosis);
+	buttons["Options"]        = make_unique<Button>(120, 420, 150, 50, "Options",        &this->font_dosis);
+	buttons["Editor"]         = make_unique<Button>(120, 520, 150, 50, "Editor",         &this->font_dosis);
+	buttons["Quit"]			  = make_unique<Button>(120, 720, 150, 50, "Quit",			 &this->font_dosis);
 }
 
 void MainMenu::UpdateButtons(const float& frame_time)

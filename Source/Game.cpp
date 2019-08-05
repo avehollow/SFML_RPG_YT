@@ -7,10 +7,7 @@ Game::Game()
 
 Game::~Game()
 {
-	//while (!states.empty())
-	//{
-	//	states.pop();
-	//}
+
 }
 
 void Game::Update()

@@ -10,6 +10,10 @@ Player::Player(float posX, float posY,  sf::Sprite* sprite, sf::Texture* texture
 
 	if (texture)
 		this->sprite->setTexture(*texture);
+
+	
+	CreateMovementComponent(sprite, 350.0f, 10.0f, 1.0f);
+	SetMaxVelocity(350.0f);
 }
 
 Player::~Player()

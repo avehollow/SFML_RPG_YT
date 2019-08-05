@@ -26,7 +26,7 @@ void GameState::InitSprites()
 	// Works. Create new sprite!
 	//sprites["PLAYER1"].setTexture(textures["PLAYER"]);
 	//sprites["PLAYER2"].setTexture(textures["PLAYER"]);
-	std::cout <<"\n\nLiczba sprites: "<< sprites.size();
+	std::cout <<"\n\nCount sprites: "<< sprites.size();
 }
 
 void GameState::EndState()
