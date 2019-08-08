@@ -17,37 +17,57 @@ private:
 	public:
 		ACCESS_POINTER sf::Texture* sheet  = nullptr;
 		ACCESS_POINTER sf::Sprite*  sprite = nullptr;
-		
-		sf::IntRect start_pos;
-		sf::IntRect end_pos;
-		sf::IntRect curr_pos;
 
-		sf::Clock	clock;
+	private:
+		sf::IntRect start_pos = {};
+		sf::IntRect end_pos	  = {};
+		sf::IntRect curr_pos  = {};
 
+		float time		= 0.0f;
 		float speed		= 0.0f;
-		int   width     = 0.f;
-		int   height    = 0.f;
+		int   width     = 0;
+		int   height    = 0;
 
 	public:
-		Animation(sf::Texture* sheet, int speed, int start_x, int start_y, int end_x, int end_y, int width, int height)
+		Animation(sf::Sprite* sprite, sf::Texture* sheet, float speed, int start_frame_x, int start_frame_y, int end_frame_x, int end_frame_y, int width, int height)
 			: sheet(sheet)
+			, sprite(sprite)
 			, speed(speed)
 			, width(width)
 			, height(height)
 		{
-			start_pos = sf::IntRect(start_x, start_y, width, height);
-			end_pos   = sf::IntRect(end_x,   end_y,   width, height);
+			start_pos = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
+			end_pos   = sf::IntRect(end_frame_x   * width, end_frame_y   * height, width, height);
 			curr_pos  = start_pos;
 
-			sprite->setTexture(*sheet, true);
-			sprite->setTextureRect(start_pos);
+			this->sprite->setTexture(*sheet, true);
+			this->sprite->setTextureRect(start_pos);
 		}
+		Animation()  = default;
 		~Animation() = default;
 
-		void Update(const float& frame_time)
+		void Set(sf::Sprite* sprite, sf::Texture* sheet, float speed, int start_frame_x, int start_frame_y, int end_frame_x, int end_frame_y, int width, int height)
 		{
-			// HACK * frame_time!
-			if (clock.getElapsedTime().asSeconds() * frame_time > speed)
+			this->sheet  = sheet;
+			this->sprite = sprite;
+			this->speed  = speed;
+			this->width  = width;
+			this->height = height;
+
+			start_pos = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
+			end_pos   = sf::IntRect(end_frame_x * width, end_frame_y * height, width, height);
+			curr_pos  = start_pos;
+
+			this->sprite->setTexture(*sheet, true);
+			this->sprite->setTextureRect(start_pos);
+
+			time = 0.0f;
+		}
+
+
+		void Play(const float& frame_time)
+		{
+			if (time += frame_time; time > speed)
 			{
 				if (curr_pos != end_pos)
 				{
@@ -57,34 +77,37 @@ private:
 				{
 					curr_pos = start_pos;
 				}
-
-
-				clock.restart();
+				sprite->setTextureRect(curr_pos);
+				time = 0.0f;
 			}
 		}
 
-		// HACK Add function
-		void Play() {};
-		void Pause() {};
-		void Reset() {};
+		// HACK Add body function
+		void Reset()
+		{
+			curr_pos = start_pos;
+			time	 = 0.0f;
+
+			sprite->setTextureRect(curr_pos);
+			
+		};
 
 	};// End class Animation
 
 private:
-	sf::Texture* sheet  = nullptr;
-	sf::Sprite*  sprite = nullptr;
+	ACCESS_POINTER sf::Texture* sheet		   = nullptr;
+	ACCESS_POINTER sf::Sprite*  sprite		   = nullptr;
+	ACCESS_POINTER Animation*   last_animation = nullptr;
 	std::map<std::string, Animation> animations;
+	
 
 public:
-	AnimationComponent();
+	AnimationComponent(sf::Sprite* sprite, sf::Texture* sheet);
 	virtual ~AnimationComponent();
 
-	void AddAnimation(std::string_view key);
+	void AddAnimation(std::string_view key, sf::Texture* sheet, float speed, int start_frame_x, int start_frame_y, int end_frame_x, int end_frame_y, int width, int height);
 	
-	void Update(const float& frame_time);
+	void Play(std::string_view key, const float& frame_time);
 
-	void PlayAnimation (std::string_view animation);
-	void PauseAnimation(std::string_view animation);
-	void ResetAnimation(std::string_view animation);
 };
 

@@ -16,6 +16,21 @@ MovementComponent::~MovementComponent()
 	std::cout << "Destructor " << __func__ << "\n";
 }
 
+MovementComponent::MOVE_STATE MovementComponent::GetMoveState()
+{
+	if (velocity.x > 0)
+		return MOVE_RIGHT;
+
+	if (velocity.x < 0)
+		return MOVE_LEFT;
+
+	if (velocity.y > 0)
+		return MOVE_DOWN;
+
+	if (velocity.y < 0)
+		return MOVE_UP;
+}
+
 void MovementComponent::Move(float dir_x, float dir_y)
 {
 	dir_x = std::clamp(dir_x, -1.0f, 1.0f);
@@ -36,7 +51,12 @@ void MovementComponent::Update(const float& frame_time)
 	{
 		// HACK. Maybe someohter way to calculate deceleration ?
 		velocity *= 1.0f - (deceleration / 100.0f);
+
+		fabs(velocity.x) < 9 ? velocity.x = 0 : velocity.x;
+		fabs(velocity.y) < 9 ? velocity.y = 0 : velocity.y;
 	};
+
+	
 	/*if (velocity.x > 0.0f)
 	{
 		velocity.x -= deceleration;

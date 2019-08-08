@@ -1,8 +1,9 @@
 #pragma once
-#include "EditorState.h"
+
+#include "GameState.h"
 #include "Button.h"
 
-class MainMenu : public State
+class EditorState : public State
 {
 private:
 	sf::RectangleShape background_s;
@@ -12,8 +13,8 @@ private:
 
 	std::map<string, unique_ptr<Button>> buttons;
 public:
-	MainMenu(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
-	virtual ~MainMenu();
+	EditorState(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	virtual ~EditorState();
 
 	void InitButtons();
 	void UpdateButtons(const float& frame_time);

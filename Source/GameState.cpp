@@ -6,8 +6,9 @@ GameState::GameState(weak_ptr<sf::RenderWindow> window, std::map<std::string, in
 {
 	this->InitKeybinds();
 	this->InitTextures();
+
 	this->InitSprites();
-	player = make_shared<Player>(20, 20,&sprites["PLAYER"]);
+	player = make_shared<Player>(20, 20, &sprites["PLAYER"], &textures["PLAYER"]);
 }
 
 GameState::~GameState()
@@ -17,7 +18,7 @@ GameState::~GameState()
 
 void GameState::InitTextures()
 {
-	textures["PLAYER"].loadFromFile("Resource/Image/Sprites/Player/player.png");
+	textures["PLAYER"].loadFromFile("Resource/Image/Sprites/Player/PLAYER_SHEET.png");
 }
 
 void GameState::InitSprites()

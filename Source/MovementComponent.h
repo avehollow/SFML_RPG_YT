@@ -11,7 +11,6 @@
 #include <map>
 #include <stack>
 #include <fstream>
-#include <string>
 #include <queue>
 
 using std::unique_ptr;
@@ -34,6 +33,17 @@ using std::to_string;
 
 class MovementComponent
 {
+public:
+	enum MOVE_STATE
+	{
+		IDLE		= 0,
+		MOVING		= 1,
+		MOVE_LEFT,
+		MOVE_RIGHT,
+		MOVE_UP,
+		MOVE_DOWN,
+		ATTACK
+	};
 private:
 	ACCESS_POINTER sf::Sprite* sprite = nullptr;
 
@@ -54,6 +64,12 @@ public:
 	void SetMaxVelocity(const float& max_velocity) {
 		this->max_velocity = max_velocity;
 	}
+
+	const bool IsIdle() const {
+		return (velocity.x == 0 && velocity.y == 0) ? true : false;
+	}
+
+	MOVE_STATE GetMoveState();
 
 	void Move(float dir_x, float dir_y);
 	void Update(const float& frame_time);

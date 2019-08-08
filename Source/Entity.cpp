@@ -27,7 +27,7 @@ void Entity::move(const float& frame_time, float dir_x, float dir_y)
 	dir_x = std::clamp(dir_x, -1.0f, 1.0f);
 	dir_y = std::clamp(dir_y, -1.0f, 1.0f);
 
-	if (movement_component)
+	if (movement_component.get())
 	{
 		movement_component->Move(dir_x, dir_y);
 	}
@@ -36,13 +36,23 @@ void Entity::move(const float& frame_time, float dir_x, float dir_y)
 
 void Entity::SetMaxVelocity(const float& max_velocity)
 {
-	if(movement_component)
+	if(movement_component.get())
 		movement_component->SetMaxVelocity(max_velocity);
 }
 
-void Entity::CreateMovementComponent(sf::Sprite* sprite, float max_velocity, float acceleraton, float deceleration)
+void Entity::CreateMovementComponent(float max_velocity, float acceleraton, float deceleration)
 {
 	movement_component = make_unique<MovementComponent>(sprite, max_velocity, acceleraton, deceleration);
+}
+
+void Entity::CreateAnimationComponent(sf::Texture* sheet)
+{
+	animation_component = make_unique<AnimationComponent>(sprite, sheet);
+}
+
+void Entity::CreateHitboxComponent(float offset_x, float offset_y, float width, float height)
+{
+	hitbox_component = make_unique<HitboxComponent>(sprite, offset_x, offset_y, width, height);
 }
 
 Entity::Entity()
@@ -57,10 +67,10 @@ Entity::~Entity()
 
 void Entity::Update(const float& frame_time)
 {
-	movement_component->Update(frame_time);
+	
 }
 
-void Entity::Render(sf::RenderTarget* target)
+void Entity::Render(sf::RenderWindow* target)
 {
 	if (!target) return;
 

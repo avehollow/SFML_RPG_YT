@@ -1,6 +1,8 @@
 #pragma once
 
 #include "MovementComponent.h"
+#include "AnimationComponent.h"
+#include "HitboxComponent.h"
 
 
 class Entity
@@ -11,7 +13,9 @@ protected:
 	ACCESS_POINTER sf::Sprite*  sprite  = nullptr; 
 	ACCESS_POINTER sf::Texture* texture = nullptr;
 	
-	unique_ptr<MovementComponent> movement_component;
+	unique_ptr<MovementComponent>  movement_component;
+	unique_ptr<AnimationComponent> animation_component;
+	unique_ptr<HitboxComponent>    hitbox_component;
 
 public:
 	virtual const sf::Vector2f& GetPosition();
@@ -19,14 +23,16 @@ public:
 	virtual	void				SetTexture(sf::Texture* texture);
 	virtual void				move(const float& frame_time, float dir_x, float dir_y);
 	virtual void				SetMaxVelocity(const float& max_velocity);
-	virtual void				CreateMovementComponent(sf::Sprite* sprite, float max_velocity, float acceleraton, float deceleration);
+	virtual void				CreateMovementComponent(float max_velocity, float acceleraton, float deceleration);
+	virtual void				CreateAnimationComponent(sf::Texture* sheet);
+	virtual void				CreateHitboxComponent(float offset_x, float offset_y, float width, float height);
 
 public:
 	Entity();
 	virtual ~Entity();
 
 	virtual void Update(const float& frame_time)		    ;// = 0;
-	virtual void Render(sf::RenderTarget* target = nullptr) ;// = 0;
+	virtual void Render(sf::RenderWindow* target = nullptr) ;// = 0;
 
 };
 
