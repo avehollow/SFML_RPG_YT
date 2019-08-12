@@ -71,7 +71,8 @@ void Game::UpdateSFMLEvents()
 void Game::InitMainWindow()
 {
 	sf::ContextSettings window_settings;
-	window_settings.antialiasingLevel = 16;
+	// Bad idea
+	//window_settings.antialiasingLevel = 1;
 
 	if (!bFullscreen)
 	{

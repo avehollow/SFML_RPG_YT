@@ -61,6 +61,9 @@ public:
 	const sf::Vector2f& GetVelocity()const {
 		return velocity;
 	}
+	const float& GetMaxVelocity()const {
+		return max_velocity;
+	}
 	void SetMaxVelocity(const float& max_velocity) {
 		this->max_velocity = max_velocity;
 	}

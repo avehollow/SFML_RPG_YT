@@ -18,6 +18,10 @@ MovementComponent::~MovementComponent()
 
 MovementComponent::MOVE_STATE MovementComponent::GetMoveState()
 {
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		return ATTACK;
+
 	if (velocity.x > 0)
 		return MOVE_RIGHT;
 
@@ -29,6 +33,7 @@ MovementComponent::MOVE_STATE MovementComponent::GetMoveState()
 
 	if (velocity.y < 0)
 		return MOVE_UP;
+
 }
 
 void MovementComponent::Move(float dir_x, float dir_y)
@@ -47,17 +52,17 @@ void MovementComponent::Move(float dir_x, float dir_y)
 void MovementComponent::Update(const float& frame_time)
 {
 
-	if (fabs(velocity.x) > 0 || fabs(velocity.y) > 0)
-	{
-		// HACK. Maybe someohter way to calculate deceleration ?
-		velocity *= 1.0f - (deceleration / 100.0f);
+	//if (fabs(velocity.x) > 0 || fabs(velocity.y) > 0)
+	//{
+	//	// HACK. Maybe someohter way to calculate deceleration ?
+	//	velocity *= 1.0f - (deceleration / 100.0f);
 
-		fabs(velocity.x) < 9 ? velocity.x = 0 : velocity.x;
-		fabs(velocity.y) < 9 ? velocity.y = 0 : velocity.y;
-	};
+	//	fabs(velocity.x) < 9 ? velocity.x = 0 : velocity.x;
+	//	fabs(velocity.y) < 9 ? velocity.y = 0 : velocity.y;
+	//};
 
 	
-	/*if (velocity.x > 0.0f)
+	if (velocity.x > 0.0f)
 	{
 		velocity.x -= deceleration;
 		velocity.x = std::clamp(velocity.x, 0.0f, max_velocity);
@@ -76,7 +81,7 @@ void MovementComponent::Update(const float& frame_time)
 	{
 		velocity.y += deceleration;
 		velocity.y = std::clamp(velocity.y, -max_velocity, 0.0f);
-	}*/
+	}
 
 	if (sprite)
 		sprite->move(this->velocity * frame_time);

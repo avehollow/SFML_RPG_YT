@@ -1,5 +1,7 @@
 #include "AnimationComponent.h"
 
+//float AnimationComponent::Animation::time = 0.0f;
+
 AnimationComponent::AnimationComponent(sf::Sprite* sprite, sf::Texture* sheet)
 	: sprite(sprite)
 	, sheet(sheet)
@@ -16,20 +18,25 @@ void AnimationComponent::AddAnimation(std::string_view key, sf::Texture* sheet, 
 	animations[key.data()].Set(sprite, sheet, speed, start_frame_x, start_frame_y, end_frame_x, end_frame_y, width, height);
 }
 
-void AnimationComponent::Play(std::string_view key, const float& frame_time)
+bool AnimationComponent::Play(std::string_view key, const float& frame_time, bool priority, float modifier, float modifier_max )
 {
-	if (last_animation != &animations[key.data()] )
+	if (priority)
 	{
-		if (last_animation == nullptr)
-			last_animation = &animations[key.data()];
-		else
+		
+	}
+	else
+	{
+		if (last_animation != &animations[key.data()])
 		{
-			last_animation = &animations[key.data()];
-			last_animation->Reset();
+			if (last_animation) {
+				last_animation->Reset();
+			}
 		}
 	}
 
-	animations[key.data()].Play(frame_time);
+	animations[key.data()].Play(frame_time, modifier / modifier_max);
 	last_animation = &animations[key.data()];
+
+	return animations[key.data()].IsCompleted();
 }
 
