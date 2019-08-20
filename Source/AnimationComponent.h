@@ -22,8 +22,9 @@ private:
 		sf::IntRect start_pos = {};
 		sf::IntRect end_pos	  = {};
 		sf::IntRect curr_pos  = {};
+		sf::IntRect last_pos  = {};
 
-		float time		= 0.0f; 
+		float time		= 99.0f; 
 		float speed		= 0.0f;
 		int   width     = 0;
 		int   height    = 0;
@@ -39,6 +40,7 @@ private:
 		{
 			start_pos = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
 			end_pos   = sf::IntRect(end_frame_x   * width, end_frame_y   * height, width, height);
+			last_pos = sf::IntRect((end_frame_x - 1) * width, (end_frame_y - 1) * height, width, height);
 			curr_pos  = start_pos;
 
 			this->sprite->setTexture(*sheet, true);
@@ -57,12 +59,13 @@ private:
 
 			start_pos = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
 			end_pos   = sf::IntRect(end_frame_x * width, end_frame_y * height, width, height);
+			last_pos  = sf::IntRect((end_frame_x-1) * width, (end_frame_y) * height, width, height);
 			curr_pos  = start_pos;
 
 			this->sprite->setTexture(*sheet, true);
 			this->sprite->setTextureRect(start_pos);
 
-			time = 0.0f;
+			time = 99.0f;
 		}
 
 
@@ -83,22 +86,20 @@ private:
 				}
 				else
 				{
-					completed = true;
 					curr_pos = start_pos;
+					completed = true;
 				}
-				sprite->setTextureRect(curr_pos);
 				time = 0.0f;
 			}
+			sprite->setTextureRect(curr_pos);
 		}
 
 	
 		void Reset()
 		{
-			curr_pos = start_pos;
-			time	 = 0.0f;
-
-			//sprite->setTextureRect(curr_pos);
-			
+			curr_pos  = start_pos;
+			time	  = 99.0f;
+			completed = false;
 		};
 
 		bool IsCompleted() const {

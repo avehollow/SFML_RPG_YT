@@ -20,19 +20,14 @@ void AnimationComponent::AddAnimation(std::string_view key, sf::Texture* sheet, 
 
 bool AnimationComponent::Play(std::string_view key, const float& frame_time, bool priority, float modifier, float modifier_max )
 {
-	if (priority)
-	{
-		
-	}
-	else
-	{
+
 		if (last_animation != &animations[key.data()])
 		{
 			if (last_animation) {
 				last_animation->Reset();
 			}
 		}
-	}
+	
 
 	animations[key.data()].Play(frame_time, modifier / modifier_max);
 	last_animation = &animations[key.data()];

@@ -34,6 +34,10 @@ MovementComponent::MOVE_STATE MovementComponent::GetMoveState()
 	if (velocity.y < 0)
 		return MOVE_UP;
 
+	if (velocity.x == 0 && velocity.y == 0)
+		return IDLE;
+	
+
 }
 
 void MovementComponent::Move(float dir_x, float dir_y)
