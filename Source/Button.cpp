@@ -40,18 +40,19 @@ Button::~Button()
 void Button::Update(sf::Vector2f mouse_pos, const float& frame_time)
 {
 	STATE = STATES::BTN_IDLE;
-	if (clock.getElapsedTime().asSeconds() >= 0.1f * frame_time)
-	{
 		if (shape.getGlobalBounds().contains(mouse_pos))
 		{
 			STATE = STATES::BTN_HOVER;
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (clock.getElapsedTime().asSeconds() >= 50.f * frame_time)
 			{
-				STATE = STATES::BTN_PRESSED;
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					STATE = STATES::BTN_PRESSED;
+					clock.restart();
+				}
 			}
 		}
-		clock.restart();
-	}
+	
 
 		switch (STATE)
 		{

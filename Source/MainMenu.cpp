@@ -57,11 +57,15 @@ void MainMenu::UpdateButtons(const float& frame_time)
 
 	if (buttons.contains("New Game") && buttons.at("New Game")->IsPressed())
 	{
-		states->push(make_unique<GameState>(window, supported_keys, states)); // states and supported_keyds is pointer
+		states->push(make_unique<GameState>(window, supported_keys, states)); // states and supported_keys is pointer
 	}
 	if (buttons.contains("Editor") && buttons.at("Editor")->IsPressed())
 	{
-		states->push(make_unique<EditorState>(window, supported_keys, states)); // states and supported_keyds is pointer
+		states->push(make_unique<EditorState>(window, supported_keys, states)); // states and supported_keys is pointer
+	}
+	if (buttons.contains("Options") && buttons.at("Options")->IsPressed())
+	{
+		states->push(make_unique<SettingsState>(window, supported_keys, states)); // states and supported_keys is pointer
 	}
 
 	if (buttons.contains("Quit") && buttons.at("Quit")->IsPressed())

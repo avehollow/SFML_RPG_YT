@@ -5,11 +5,32 @@ State::State(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supp
 	this->window = window.lock();
 	this->supported_keys = supported_keys;
 	this->states = states;
+
+	if (!font_dosis.loadFromFile("Data/Fonts/Dosis-Light.ttf"))
+	{
+		std::cout << "\nError! MainMenu::InitFonts()! Dosis\n";
+		throw "Error! MainMenu::InitFonts()! Dosis";
+	}
 }
 
 State::~State()
 {
 	std::cout << "Destructor State::~State()\n";
+}
+
+bool State::KeyTime()
+{
+	if (key_time >= key_time_max)
+	{
+		key_time = 0.0f;
+		return true;
+	}
+	return false;
+}
+
+void State::UpdateKeyTime(const float& frame_time)
+{
+	key_time += frame_time;
 }
 
 void State::UpdateMousePos()

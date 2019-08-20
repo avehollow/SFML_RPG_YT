@@ -1,10 +1,11 @@
 #pragma once
 
-#include "State.h"
+#include "PauseState.h"
 
 class GameState : public State
 {
 private:
+	PauseState pause_menu;
 	shared_ptr<Player> player;
 
 public:
@@ -13,11 +14,14 @@ public:
 
 	void InitTextures();
 	void InitSprites();
+	
+	void InitPauseMenu();
+	void UpdatePauseMenuInput();
 
 
-	void EndState()								 override;
-	void InitKeybinds()							 override;
-	void UpdateMousePos()						 override;
+	void EndState()			override;
+	void InitKeybinds()		override;
+	void UpdateMousePos()	override;
 
 	void UpdateInput(const float& frame_time)		  override;
 	void Update(const float& frame_time)			  override;

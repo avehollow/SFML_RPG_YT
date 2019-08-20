@@ -1,14 +1,11 @@
 #pragma once
-#include "EditorState.h"
-#include "Button.h"
+#include "SettingsState.h"
 
 class MainMenu : public State
 {
 private:
 	sf::RectangleShape background_s;
 	sf::Texture		   background_t;
-
-	sf::Font font_dosis;
 
 	std::map<string, unique_ptr<Button>> buttons;
 public:

@@ -16,9 +16,18 @@ protected:
 	sf::Vector2i mouse_pos_window;
 	sf::Vector2f mouse_pos_view;
 
+	sf::Font font_dosis;
 
 
-	bool bQuit = false;
+
+	float key_time     = 0.0f;
+	float key_time_max = 0.1f;
+
+
+	bool bQuit  = false;
+
+public: 
+	bool bPause = false;
 
 public:
 	State(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
@@ -28,7 +37,8 @@ public:
 		return bQuit;
 	};
 
-
+	virtual bool KeyTime();
+	virtual void UpdateKeyTime(const float& frame_time);
 	virtual void UpdateMousePos();
 	virtual void EndState()									  = 0;
 	virtual void InitKeybinds()								  = 0;
