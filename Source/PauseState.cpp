@@ -56,7 +56,7 @@ bool PauseState::IsButtonPressed(std::string_view key)
 
 void PauseState::AddButton(std::string_view key, float rel_x, float rel_y, std::string_view text)
 {
-	buttons[key.data()] = make_unique<Button>(
+	buttons[key.data()] = make_unique<gui::Button>(
 		(container.getPosition().x + this->text.getGlobalBounds().width / 2.0f) + rel_x,
 		50.0f + rel_y,
 		150,

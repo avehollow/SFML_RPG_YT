@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GameState.h"
-#include "Button.h"
 
 class EditorState : public State
 {
@@ -11,7 +10,7 @@ private:
 
 	sf::Font font_dosis;
 
-	std::map<string, unique_ptr<Button>> buttons;
+	std::map<string, unique_ptr<gui::Button>> buttons;
 public:
 	EditorState(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~EditorState();

@@ -42,17 +42,17 @@ void MainMenu::InitFonts()
 
 void MainMenu::InitButtons()
 {
-	buttons["New Game"]		  = make_unique<Button>(120, 320, 150, 50, "New Game",		 &this->font_dosis);
-	buttons["Options"]        = make_unique<Button>(120, 420, 150, 50, "Options",        &this->font_dosis);
-	buttons["Editor"]         = make_unique<Button>(120, 520, 150, 50, "Editor",         &this->font_dosis);
-	buttons["Quit"]			  = make_unique<Button>(120, 720, 150, 50, "Quit",			 &this->font_dosis);
+	buttons["New Game"]		  = make_unique<gui::Button>(120, 320, 150, 50, "New Game",		 &this->font_dosis);
+	buttons["Options"]        = make_unique<gui::Button>(120, 420, 150, 50, "Options",        &this->font_dosis);
+	buttons["Editor"]         = make_unique<gui::Button>(120, 520, 150, 50, "Editor",         &this->font_dosis);
+	buttons["Quit"]			  = make_unique<gui::Button>(120, 720, 150, 50, "Quit",			 &this->font_dosis);
 }
 
 void MainMenu::UpdateButtons(const float& frame_time)
 {
-	for (const auto& button : buttons)
+	for (const auto& [name,button] : buttons)
 	{
-		button.second->Update(mouse_pos_view, frame_time);
+		button->Update(mouse_pos_view, frame_time);
 	}
 
 	if (buttons.contains("New Game") && buttons.at("New Game")->IsPressed())
@@ -76,9 +76,9 @@ void MainMenu::UpdateButtons(const float& frame_time)
 
 void MainMenu::RenderButtons(sf::RenderWindow* window)
 {
-	for (const auto& button : buttons)
+	for (const auto& [name,button] : buttons)
 	{
-		button.second->Render(window);
+		button->Render(window);
 	}
 }
 

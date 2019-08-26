@@ -7,7 +7,9 @@ private:
 	sf::RectangleShape background_s;
 	sf::Texture		   background_t;
 
-	std::map<string, unique_ptr<Button>> buttons;
+	std::map<string, unique_ptr<gui::Button>> buttons;
+
+	shared_ptr<gui::DropList> dl;
 public:
 	SettingsState(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~SettingsState();

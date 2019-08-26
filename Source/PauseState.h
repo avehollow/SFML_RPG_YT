@@ -1,6 +1,6 @@
 #pragma once
 #include "State.h"
-#include "Button.h"
+#include "Gui.h"
 
 class PauseState
 {
@@ -11,7 +11,7 @@ private:
 	sf::RectangleShape background;
 	sf::RectangleShape container;
 
-	map<string, unique_ptr<Button>> buttons;
+	map<string, unique_ptr<gui::Button>> buttons;
 public:
 	PauseState(sf::RenderWindow* window, sf::Font& font);
 	virtual ~PauseState();

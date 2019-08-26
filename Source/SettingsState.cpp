@@ -38,14 +38,15 @@ void SettingsState::InitFonts()
 
 void SettingsState::InitButtons()
 {
-	buttons["Quit"] = make_unique<Button>(120, 120, 150, 50, "Quit", &this->font_dosis);
+	buttons["Quit"] = make_unique<gui::Button>(120, 720, 150, 50, "Quit", &this->font_dosis);
+	dl = make_shared<gui::DropList>(900, 200, 100, 50,  font_dosis, std::vector<string>{"4x", "8x", "16x"} );
 }
 
 void SettingsState::UpdateButtons(const float& frame_time)
 {
-	for (const auto& button : buttons)
+	for (const auto& [name,button] : buttons)
 	{
-		button.second->Update(mouse_pos_view, frame_time);
+		button->Update(mouse_pos_view, frame_time);
 	}
 
 	if (buttons.contains("Quit") && buttons.at("Quit")->IsPressed())
@@ -53,14 +54,20 @@ void SettingsState::UpdateButtons(const float& frame_time)
 		this->EndState();
 		this->bQuit = true;
 	}
+	if (dl.get())
+		dl->Update(mouse_pos_view,frame_time);
+	
 }
 
 void SettingsState::RenderButtons(sf::RenderWindow* window)
 {
-	for (const auto& button : buttons)
+	for (const auto& [name,button] : buttons)
 	{
-		button.second->Render(window);
+		button->Render(window);
 	}
+
+	if (dl.get())
+		dl->Render(window);
 }
 
 void SettingsState::EndState()

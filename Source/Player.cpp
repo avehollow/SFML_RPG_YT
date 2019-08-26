@@ -110,9 +110,9 @@ void Player::UpdateAnimation(const float& frame_time)
 		if (atack)
 		{
 			if (sprite->getScale().x > 0.0f)
-				sprite->setOrigin(96.0f, 0.0f);
+				sprite->setOrigin(66.0f, 0.0f); // 96.0f default
 			else
-				sprite->setOrigin(258.0f + 96.0f, 0.0f);
+				sprite->setOrigin(228.0f + 96.0f, 0.0f); //258.0f default
 
 			if (animation_component->Play("ATTACK", frame_time))
 			{
