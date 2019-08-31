@@ -12,7 +12,7 @@ private:
 
 	std::map<string, unique_ptr<gui::Button>> buttons;
 public:
-	EditorState(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	EditorState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~EditorState();
 
 	void InitButtons();

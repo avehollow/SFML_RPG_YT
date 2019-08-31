@@ -30,7 +30,7 @@ public:
 	bool bPause = false;
 
 public:
-	State(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	State(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~State();
 
 	const bool& GetQuitFlag()const {

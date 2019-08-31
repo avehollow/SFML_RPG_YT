@@ -9,7 +9,7 @@ private:
 	shared_ptr<Player> player;
 
 public:
-	GameState(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	GameState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~GameState();
 
 	void InitTextures();

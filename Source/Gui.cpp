@@ -1,6 +1,5 @@
 #include "Gui.h"
 
-
 sf::Clock gui::Button::clock;
 
 namespace gui
@@ -48,13 +47,18 @@ namespace gui
 		if (shape.getGlobalBounds().contains(mouse_pos))
 		{
 			STATE = STATES::BTN_HOVER;
-			if (clock.getElapsedTime().asSeconds() >= 30.f * frame_time)
+
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+
+				if (clock.getElapsedTime().asSeconds() >= 20.f * frame_time)
 				{
+
 					STATE = STATES::BTN_PRESSED;
 					clock.restart();
+
 				}
+				clock.restart();
 			}
 		}
 
@@ -67,8 +71,8 @@ namespace gui
 			break;
 
 		case Button::STATES::BTN_PRESSED:
-			shape.setFillColor(pressed_color);
-			text.setFillColor(pressed_text_color);
+			//shape.setFillColor(pressed_color);
+			//text.setFillColor(pressed_text_color);
 			break;
 
 		case Button::STATES::BTN_HOVER:
@@ -104,20 +108,21 @@ namespace gui
 	//  //////													LIST																    //////  //
 	/// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ///
 
-	DropList::DropList(float pos_x, float pos_y, float width, float height, sf::Font& font, std::vector<std::string> list, unsigned int default_index)
+	DropList::DropList(float pos_x, float pos_y, float width, float height, sf::Font& font, std::vector<string> list, string text, unsigned int default_index)
 		:  font(font)
 	{
-		for (size_t i = 0; i <list.size(); i++)
+		int i = 1;
+		for (const auto& el: list)
 		{
 			this->list.push_back(
 				std::make_unique<Button>(
 					pos_x, 
-					pos_y + (i+1)*height,
+					pos_y + (i++)*height,
 					width, 
 					height, 
-					list[i], 
+					el, 
 					&font,
-					13,
+					15,
 					sf::Color(75, 75, 75, 255),
 					sf::Color(145, 145, 145, 255),
 					sf::Color(150, 0, 0, 255),
@@ -135,23 +140,33 @@ namespace gui
 			height,
 			" ",
 			&font,
-			13,
+			15,
 			sf::Color(75, 75, 75, 255),
 			sf::Color(145, 145, 145, 255),
 			sf::Color(150, 0, 0, 255),
-			sf::Color(75, 75, 75, 100),
+			sf::Color(25, 75, 75, 100),
 			sf::Color(145, 145, 145, 100),
 			sf::Color(150, 0, 0, 100)
 			);
+	
+		this->text.setString(text);
+		this->text.setPosition(pos_x - text.length() * 7, pos_y + 13);
+		this->text.setFont(font);
+		this->text.setCharacterSize(15);
+		this->text.setStyle(sf::Text::Bold);
 
-		active_element->text.setString( this->list[default_index].get()->text.getString() );
+		if (!list.empty())
+		{
+			active_element->text.setString(this->list[default_index]->text.getString());
+		}
+
 		active_element->SetPosition(pos_x, pos_y);
 	
 	}
 
 	DropList::~DropList()
 	{
-		std::cout << "Destructor " << __func__ << "\n";
+		std::cout << "Destructor " << __func__ <<" "<< text.getString().toAnsiString()<< " \n";
 	}
 	void DropList::Update(sf::Vector2f mouse_pos, const float& frame_time)
 	{
@@ -164,7 +179,7 @@ namespace gui
 				if (el->IsPressed())
 				{
 					bShowList = !bShowList; //NICE
-					active_element->text.setString(el.get()->text.getString());
+					active_element->text.setString(el->text.getString());
 				}
 			}
 		}
@@ -189,6 +204,8 @@ namespace gui
 
 		if (active_element)
 			active_element->Render(window);
+
+		window->draw(text);
 	}
 }
 

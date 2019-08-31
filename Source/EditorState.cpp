@@ -2,7 +2,7 @@
 
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
-EditorState::EditorState(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
+EditorState::EditorState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
 	: State(window, supported_keys, states)
 {
 	this->InitFonts();

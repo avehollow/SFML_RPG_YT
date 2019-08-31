@@ -1,7 +1,7 @@
 #include "MainMenu.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
-MainMenu::MainMenu(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
+MainMenu::MainMenu(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
 	: State(window, supported_keys, states)
 {
 	this->InitFonts();
@@ -43,13 +43,20 @@ void MainMenu::InitFonts()
 void MainMenu::InitButtons()
 {
 	buttons["New Game"]		  = make_unique<gui::Button>(120, 320, 150, 50, "New Game",		 &this->font_dosis);
-	buttons["Options"]        = make_unique<gui::Button>(120, 420, 150, 50, "Options",        &this->font_dosis);
-	buttons["Editor"]         = make_unique<gui::Button>(120, 520, 150, 50, "Editor",         &this->font_dosis);
+	buttons["Options"]        = make_unique<gui::Button>(120, 420, 150, 50, "Options",       &this->font_dosis);
+	buttons["Editor"]         = make_unique<gui::Button>(120, 520, 150, 50, "Editor",        &this->font_dosis);
 	buttons["Quit"]			  = make_unique<gui::Button>(120, 720, 150, 50, "Quit",			 &this->font_dosis);
 }
 
 void MainMenu::UpdateButtons(const float& frame_time)
 {
+	buttons["New Game"]->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.4f);
+	buttons["Options"] ->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.50f);
+	buttons["Editor"]  ->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.60f);
+	buttons["Quit"]    ->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.90f);
+
+
+
 	for (const auto& [name,button] : buttons)
 	{
 		button->Update(mouse_pos_view, frame_time);
@@ -127,6 +134,10 @@ void MainMenu::UpdateInput(const float& frame_time)
 
 void MainMenu::Update(const float& frame_time)
 {
+	// HACK because if we resize window we must update background texture
+	background_s.setSize(sf::Vector2f(window->getSize()));
+
+	
 	this->UpdateInput(frame_time);
 	this->UpdateMousePos();
 	this->UpdateButtons(frame_time);

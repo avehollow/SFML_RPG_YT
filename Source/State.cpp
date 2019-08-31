@@ -1,8 +1,8 @@
 #include "State.h"
 
-State::State(weak_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
+State::State(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
 {
-	this->window = window.lock();
+	this->window = window;
 	this->supported_keys = supported_keys;
 	this->states = states;
 

@@ -3,6 +3,12 @@
 #include "SFML/Graphics.hpp"
 #include <vector>
 #include <iostream>
+#include <initializer_list>
+
+
+// HACK IMPORTANT Calculate gui item position based on the window size. LIKE Unreal engine 4 ANCHORS!!!
+//		  window->getSize().x - window->getSize().x * 0.4f
+//		  window->getSize().y - window->getSize().y * 0.7f
 
 //This pointer does not manage memory; Dont try to delete ! This pointer used only for access to data
 #define ACCESS_POINTER 
@@ -81,17 +87,24 @@ namespace gui
 	private:
 		std::unique_ptr<Button> active_element;
 		std::vector<std::unique_ptr<Button>> list;
+		sf::Text text;
 
 		sf::Font& font;
 
 		bool bShowList = false;
 
 	public:
-		DropList(float pos_x, float pos_y, float width, float height, sf::Font& font, std::vector<std::string> list, unsigned int default_index = 0 );
+		DropList(float pos_x, float pos_y, float width, float height, sf::Font& font, std::vector<string> list, string text, unsigned int default_index = 0 );
 		virtual ~DropList();
 
 		void Update(sf::Vector2f mouse_pos, const float& frame_time);
 		void Render(sf::RenderWindow* window);
+
+		// HACK lower copy
+		Button GetActiveElement()
+		{
+			return Button(*active_element.get());
+		};
 	};
 
 }
