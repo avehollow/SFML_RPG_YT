@@ -3,6 +3,21 @@
 
 class SettingsState : public State
 {
+	struct Settings
+	{
+		union
+		{
+			std::array<int, 4> parm;
+			struct
+			{
+				int  width;			// = 1920;
+				int  height;		// = 1080;
+				int  bpp;			// = 32;
+				int  bFullScreen;	// = 1;
+			};
+		};
+	};
+
 private:
 	sf::RectangleShape background_s;
 	sf::Texture		   background_t;
@@ -10,9 +25,10 @@ private:
 	std::map<string, unique_ptr<gui::Button>>   buttons;
 	std::map<string, shared_ptr<gui::DropList>> drop_lists;
 
-	bool full_screen = false;
 	vector<sf::VideoMode> video_modes;
 
+	Settings current_setting;
+	
 public:
 	SettingsState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~SettingsState();

@@ -1,12 +1,15 @@
 #pragma once
 
 #include "PauseState.h"
+#include "TileMap.h"
 
 class GameState : public State
 {
 private:
 	PauseState pause_menu;
 	shared_ptr<Player> player;
+
+	TileMap map;
 
 public:
 	GameState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);

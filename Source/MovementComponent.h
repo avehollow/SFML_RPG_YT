@@ -1,18 +1,5 @@
 #pragma once
 
-#include "imgui/imgui.h"
-#include "imgui-sfml/imgui-SFML.h"
-#include "SFML/Graphics.hpp"
-
-#include <iostream>
-#include <memory>
-#include <string>
-#include <vector>
-#include <map>
-#include <stack>
-#include <fstream>
-#include <queue>
-
 using std::unique_ptr;
 using std::shared_ptr;
 using std::weak_ptr;
@@ -23,7 +10,6 @@ using std::string;
 using std::vector;
 using std::map;
 using std::stack;
-using std::queue;
 using std::pair;
 using std::to_string;
 

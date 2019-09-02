@@ -1,12 +1,5 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-
-#include <iostream>
-#include <memory>
-#include <string>
-
-
 using std::unique_ptr;
 using std::shared_ptr;
 using std::weak_ptr;

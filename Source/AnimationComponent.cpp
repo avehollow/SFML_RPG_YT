@@ -1,6 +1,6 @@
+#include "pch.h"
 #include "AnimationComponent.h"
 
-//float AnimationComponent::Animation::time = 0.0f;
 
 AnimationComponent::AnimationComponent(sf::Sprite* sprite, sf::Texture* sheet)
 	: sprite(sprite)

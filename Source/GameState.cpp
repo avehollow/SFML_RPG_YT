@@ -1,4 +1,6 @@
+#include "pch.h"
 #include "GameState.h"
+#include "SettingsState.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
 GameState::GameState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
@@ -36,8 +38,9 @@ void GameState::InitSprites()
 
 void GameState::InitPauseMenu()
 {
-	pause_menu.AddButton("Quit",   0.0f, window.get()->getSize().y - 250.0f, "Quit"  );
-	pause_menu.AddButton("Resume", 0.0f, 250.0f,                             "Resume");
+	pause_menu.AddButton("Resume",  250.0f,                             "Resume");
+	pause_menu.AddButton("Options", window.get()->getSize().y - 500.0f, "Options"  );
+	pause_menu.AddButton("Quit",    window.get()->getSize().y - 250.0f, "Quit"  );
 }
 
 void GameState::UpdatePauseMenuInput()
@@ -49,6 +52,11 @@ void GameState::UpdatePauseMenuInput()
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("QUIT"))) && KeyTime())
 	{
 		if (bPause) bPause = false;
+	}
+
+	if (pause_menu.IsButtonPressed("Options"))
+	{
+		states->push(make_unique<SettingsState>(window, supported_keys, states));
 	}
 	
 }
@@ -135,6 +143,7 @@ void GameState::Update(const float& frame_time)
 
 void GameState::Render(sf::RenderWindow* target)
 {
+	map.Render(target);
 	player->Render(target);
 	if (bPause)
 	{

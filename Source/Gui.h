@@ -1,14 +1,8 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-#include <vector>
-#include <iostream>
-#include <initializer_list>
-
-
 // HACK IMPORTANT Calculate gui item position based on the window size. LIKE Unreal engine 4 ANCHORS!!!
-//		  window->getSize().x - window->getSize().x * 0.4f
-//		  window->getSize().y - window->getSize().y * 0.7f
+//		  window->getSize().x * 0.4f
+//		  window->getSize().y * 0.7f
 
 //This pointer does not manage memory; Dont try to delete ! This pointer used only for access to data
 #define ACCESS_POINTER 
@@ -80,6 +74,7 @@ namespace gui
 		}
 
 		void SetPosition(float x, float y);
+		sf::Vector2f GetPosition()const;
 	};
 
 	class DropList
@@ -101,9 +96,9 @@ namespace gui
 		void Render(sf::RenderWindow* window);
 
 		// HACK lower copy
-		Button GetActiveElement()
+		Button* GetActiveElement()
 		{
-			return Button(*active_element.get());
+			return active_element.get();
 		};
 	};
 

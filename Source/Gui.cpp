@@ -1,21 +1,32 @@
+#include "pch.h"
 #include "Gui.h"
 
 sf::Clock gui::Button::clock;
 
 namespace gui
 {
-	Button::Button(float x, float y, float widht, float height,
-		string text, sf::Font* font, int character_size,
-		sf::Color idle_text_color, sf::Color hover_text_color, sf::Color active_text_color,
-		sf::Color idle_color, sf::Color hover_color, sf::Color active_color)
+	Button::Button(	float x, 
+					float y, 
+					float widht,
+					float height,
+					string text,
+					sf::Font* font,
+					int character_size,
+					sf::Color idle_text_color, 
+					sf::Color hover_text_color, 
+					sf::Color active_text_color,
+					sf::Color idle_color, 
+					sf::Color hover_color,
+					sf::Color active_color)
 	{
+		shape.setFillColor(idle_color);
 		shape.setSize(sf::Vector2f(widht, height));
 		shape.setPosition(sf::Vector2f(x, y));
 
 		this->font = font;
 		this->text.setFont(*(this->font));
 		this->text.setString(text);
-		this->text.setFillColor(sf::Color::White);
+		this->text.setFillColor(idle_text_color);
 		this->text.setCharacterSize(character_size);
 		this->text.setStyle(sf::Text::Bold);
 
@@ -50,15 +61,15 @@ namespace gui
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-
-				if (clock.getElapsedTime().asSeconds() >= 20.f * frame_time)
+				// 120.f good work
+				if (clock.getElapsedTime().asSeconds() >= 120.f * frame_time)
 				{
 
 					STATE = STATES::BTN_PRESSED;
 					clock.restart();
 
 				}
-				clock.restart();
+				//clock.restart();
 			}
 		}
 
@@ -100,6 +111,12 @@ namespace gui
 			this->shape.getPosition().y + shape.getGlobalBounds().height / 2.0f - this->text.getGlobalBounds().height / 2.0f - 3 // -3 for precision
 		);
 	}
+
+	sf::Vector2f Button::GetPosition() const
+	{
+		return sf::Vector2f(shape.getPosition());
+	}
+
 
 
 

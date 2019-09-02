@@ -22,7 +22,7 @@ public:
 	}
 
 	bool IsButtonPressed(std::string_view key);
-	void AddButton(std::string_view key, float rel_x, float rel_y, std::string_view text);
+	void AddButton(std::string_view key, float rel_y, std::string_view text);
 
 	void Update(sf::Vector2f mos_pos, const float& frame_time); 
 	void Render(sf::RenderWindow* target = nullptr);

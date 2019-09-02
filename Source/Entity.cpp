@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Entity.h"
 
 void Entity::SetPosition(const float x, const float y)

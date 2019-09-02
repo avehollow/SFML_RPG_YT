@@ -2,6 +2,11 @@
 
 #include "MainMenu.h"
 
+// ImGui has been "removed" from project because of problem with precompiled headers
+// However the files still exist in the project directory / However - jednak/mimo wszystko
+//#include "imgui/imgui.h"
+//#include "imgui-sfml/imgui-SFML.h"
+
 using UINT = unsigned int;
 
 constexpr UINT WIDTH_1920  = 1920;
@@ -21,7 +26,6 @@ public:
 	void Render();
 	void Run();
 	void UpdateSFMLEvents();
-
 public:
 
 private:
@@ -32,7 +36,7 @@ private:
 	void EndApplication();
 
 private:
-	shared_ptr<sf::RenderWindow>      main_window;
+	std::shared_ptr<sf::RenderWindow> main_window;
 	sf::Event						  sfEvent;
 
 	std::wstring					  window_title = L"SFML_RPG_YT";
@@ -44,7 +48,5 @@ private:
 
 	std::map<std::string, int>		  supported_keys;
 
-
-	bool bFullscreen = 0;
 };
 

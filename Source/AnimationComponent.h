@@ -1,11 +1,5 @@
 #pragma once
 
-#include "SFML/Graphics.hpp"
-#include <iostream>
-#include <map>
-
-
-
 //This pointer does not manage memory; Dont try to delete ! This pointer used only for access to data
 #define ACCESS_POINTER 
 

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "MainMenu.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State

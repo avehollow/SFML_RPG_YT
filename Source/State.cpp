@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "State.h"
 
 State::State(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)

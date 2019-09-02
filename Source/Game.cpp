@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Game.h"
 
 
@@ -74,10 +75,28 @@ void Game::InitMainWindow()
 	// Bad idea
 	//window_settings.antialiasingLevel = 1;
 
-	if (!bFullscreen)
+	std::ifstream ifs("Config/settings.ini");
+	int width	    = 1920, 
+	    height	    = 1080, 
+		bpp		    = 32  ,
+		bFullScreen = 1;
+
+	if (ifs.is_open())
+	{
+		std::string setting_name;
+
+
+		ifs >> setting_name >> width
+			>> setting_name >> height
+			>> setting_name >> bpp
+			>> setting_name >> bFullScreen;
+	}
+	ifs.close();
+
+	if (!bFullScreen)
 	{
 		main_window = make_shared<sf::RenderWindow>(
-														sf::VideoMode(WIDTH_1280, HEIGHT_800),
+														sf::VideoMode(width, height, bpp),
 														window_title.c_str(),
 														sf::Style::Titlebar | sf::Style::Close,
 														window_settings
@@ -86,7 +105,7 @@ void Game::InitMainWindow()
 	else
 	{
 		main_window = make_shared<sf::RenderWindow>(
-														sf::VideoMode(WIDTH_1920, HEIGHT_1080),
+														sf::VideoMode(width, height, bpp),
 														window_title.c_str(),
 														sf::Style::Titlebar | sf::Style::Close | sf::Style::Fullscreen,
 														window_settings

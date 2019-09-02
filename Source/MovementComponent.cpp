@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "MovementComponent.h"
 
 MovementComponent::MovementComponent(sf::Sprite* sprite, float max_velocity, float acceleration, float deceleration)
