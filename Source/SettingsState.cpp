@@ -152,7 +152,12 @@ void SettingsState::UpdateGui(const float& frame_time)
 			window->create(sf::VideoMode(current_setting.width, current_setting.height, current_setting.bpp), "SFML_RPG", sf::Style::Fullscreen);
 		else
 			window->create(sf::VideoMode(current_setting.width, current_setting.height, current_setting.bpp), "SFML_RPG", sf::Style::Titlebar | sf::Style::Close);
-	
+		
+		// AVE lock framerate
+		// Bad idea
+		window->setFramerateLimit(60);
+		window->setVerticalSyncEnabled(false);
+
 		bQuit = true;
 	}
 

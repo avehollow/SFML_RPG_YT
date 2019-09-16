@@ -1,6 +1,22 @@
 #pragma once
 #include "Player.h"
 
+
+#define LOG(x) std::cout<<std::endl<<#x;
+
+class State;
+
+class StateData
+{
+public:
+	float grid_size;
+	shared_ptr<sf::RenderWindow>   window;
+	std::map<std::string, int>*    supported_keys;
+	std::stack<unique_ptr<State>>* states;
+};
+
+
+
 class State
 {
 protected:
@@ -25,6 +41,8 @@ protected:
 
 
 	bool bQuit  = false;
+
+	float gird_size = 0.0f;
 
 public: 
 	bool bPause = false;

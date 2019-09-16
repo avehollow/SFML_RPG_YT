@@ -63,16 +63,7 @@ void GameState::UpdatePauseMenuInput()
 
 void GameState::EndState()
 {
-	std::ofstream ofs("Config/keybinds.ini");
-	if (ofs.is_open())
-	{
-		ofs << "MOVE_LEFT "			 << current_keybinds["MOVE_LEFT"]
-			<< "\n" << "MOVE_RIGHT " << current_keybinds["MOVE_RIGHT"]
-			<< "\n" << "MOVE_UP "    << current_keybinds["MOVE_UP"]
-			<< "\n" << "MOVE_DOWN "  << current_keybinds["MOVE_DOWN"]
-			<< "\n" << "QUIT "       << current_keybinds["QUIT"];
-	}
-	ofs.close();
+
 }
 
 

@@ -3,6 +3,7 @@
 
 
 Game::Game()
+	: state_data({50.0f,main_window,&supported_keys,&states}) //AVE Klasa agregat
 {
 }
 
@@ -98,8 +99,7 @@ void Game::InitMainWindow()
 		main_window = make_shared<sf::RenderWindow>(
 														sf::VideoMode(width, height, bpp),
 														window_title.c_str(),
-														sf::Style::Titlebar | sf::Style::Close,
-														window_settings
+														sf::Style::Titlebar | sf::Style::Close
 													);
 	}
 	else
@@ -107,15 +107,15 @@ void Game::InitMainWindow()
 		main_window = make_shared<sf::RenderWindow>(
 														sf::VideoMode(width, height, bpp),
 														window_title.c_str(),
-														sf::Style::Titlebar | sf::Style::Close | sf::Style::Fullscreen,
-														window_settings
+														sf::Style::Titlebar | sf::Style::Close | sf::Style::Fullscreen
 													);
 
 	}
 	
-
-	main_window->setFramerateLimit(120);
-	main_window->setVerticalSyncEnabled(false);
+	// AVE lock framerate 
+	// Bad idea
+     main_window->setFramerateLimit(60);
+	 main_window->setVerticalSyncEnabled(false);
 }
 
 void Game::InitStates()
@@ -199,10 +199,22 @@ void Game::InitKeys()
 
 void Game::CalcFrameTime()
 {
-	//HACK freak way/method to calculate fps
 	frame_time = frame_clock.restart().asSeconds();
-	std::wstring title = window_title + L"   FPS: " + std::to_wstring(1.0f/frame_time) + L"      Frame_Time = " + std::to_wstring(frame_time);
-	main_window->setTitle(title);
+	
+	static double time = 0;
+	time += frame_time;
+	static int fps = 0;
+	++fps;
+	
+	if (time >= 1.0)
+	{
+		fps = 0;
+		time = 0;
+		std::wstring title = window_title + L"   FPS: " + std::to_wstring(1.0f / frame_time) + L"      Frame_Time = " + std::to_wstring(frame_time);
+		main_window->setTitle(title);
+	}
+	
+	
 }
 
 void Game::EndApplication()

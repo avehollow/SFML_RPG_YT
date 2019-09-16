@@ -5,6 +5,8 @@ using std::vector;
 TileMap::TileMap()
 {
 	map.reserve(size_x * size_y);
+
+
 	for (size_t x = 0; x < size_x; x++)
 	{
 		map.emplace_back(vector<vector<Tile>>{});

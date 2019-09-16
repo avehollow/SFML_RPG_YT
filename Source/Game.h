@@ -9,13 +9,6 @@
 
 using UINT = unsigned int;
 
-constexpr UINT WIDTH_1920  = 1920;
-constexpr UINT HEIGHT_1080 = 1080;
-
-constexpr UINT WIDTH_1280  = 1280;
-constexpr UINT HEIGHT_800  = 800;
-
-
 class Game
 {
 public:
@@ -37,7 +30,7 @@ private:
 
 private:
 	std::shared_ptr<sf::RenderWindow> main_window;
-	sf::Event						  sfEvent;
+	sf::Event						  sfEvent{};
 
 	std::wstring					  window_title = L"SFML_RPG_YT";
 
@@ -48,5 +41,6 @@ private:
 
 	std::map<std::string, int>		  supported_keys;
 
+	StateData state_data;
 };
 

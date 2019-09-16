@@ -2,6 +2,8 @@
 
 #include "GameState.h"
 
+
+
 class EditorState : public State
 {
 private:
@@ -11,6 +13,9 @@ private:
 	sf::Font font_dosis;
 
 	std::map<string, unique_ptr<gui::Button>> buttons;
+	PauseState pause_menu;
+	TileMap map;
+
 public:
 	EditorState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
 	virtual ~EditorState();
@@ -18,6 +23,9 @@ public:
 	void InitButtons();
 	void UpdateButtons(const float& frame_time);
 	void RenderButtons(sf::RenderWindow* window = nullptr);
+
+	void InitPauseMenu();
+	void UpdatePauseMenuInput();
 
 
 	void InitBackground();

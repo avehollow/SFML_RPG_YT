@@ -92,16 +92,16 @@ void MainMenu::RenderButtons(sf::RenderWindow* window)
 
 void MainMenu::EndState()
 {
-	std::ofstream ofs("Config/keybinds.ini");
-	if (ofs.is_open())
-	{
-		ofs << "MOVE_LEFT "			 << current_keybinds["MOVE_LEFT"]
-			<< "\n" << "MOVE_RIGHT " << current_keybinds["MOVE_RIGHT"]
-			<< "\n" << "MOVE_UP "	 << current_keybinds["MOVE_UP"]
-			<< "\n" << "MOVE_DOWN "  << current_keybinds["MOVE_DOWN"]
-			<< "\n" << "QUIT "       << current_keybinds["QUIT"];
-	}
-	ofs.close();
+	//std::ofstream ofs("Config/keybinds.ini");
+	//if (ofs.is_open())
+	//{
+	//	ofs << "MOVE_LEFT "			 << current_keybinds["MOVE_LEFT"]
+	//		<< "\n" << "MOVE_RIGHT " << current_keybinds["MOVE_RIGHT"]
+	//		<< "\n" << "MOVE_UP "	 << current_keybinds["MOVE_UP"]
+	//		<< "\n" << "MOVE_DOWN "  << current_keybinds["MOVE_DOWN"]
+	//		<< "\n" << "QUIT "       << current_keybinds["QUIT"];
+	//}
+	//ofs.close();
 }
 
 void MainMenu::InitKeybinds()
@@ -110,6 +110,7 @@ void MainMenu::InitKeybinds()
 	if (ifs.is_open())
 	{
 		std::string name_action;
+		//std::string key;
 		int key;
 		while (ifs >> name_action >> key)
 		{

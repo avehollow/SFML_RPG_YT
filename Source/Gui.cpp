@@ -61,15 +61,15 @@ namespace gui
 
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				// 120.f good work
-				if (clock.getElapsedTime().asSeconds() >= 120.f * frame_time)
+				// 20.f good work for 60 fps
+				if (clock.getElapsedTime().asSeconds() >= 20.f * frame_time)
 				{
 
 					STATE = STATES::BTN_PRESSED;
 					clock.restart();
 
 				}
-				//clock.restart();
+				clock.restart();
 			}
 		}
 

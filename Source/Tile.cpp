@@ -11,10 +11,10 @@ Tile::Tile(float pos_x, float pos_y, size_t size)
 	i++;
 	if (i % 2 == 0)
 	{
-		shape.setFillColor(sf::Color::Black);
+		shape.setFillColor(sf::Color::White);
 	}
 	else
-		shape.setFillColor(sf::Color::White);
+		shape.setFillColor(sf::Color::Black);
 }
 
 Tile::~Tile()

@@ -1,15 +1,17 @@
 #include "pch.h"
 #include "EditorState.h"
-
+#include "SettingsState.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
 EditorState::EditorState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
 	: State(window, supported_keys, states)
+	, pause_menu(window.get(),font_dosis)
 {
 	this->InitFonts();
 	this->InitKeybinds();
 	this->InitButtons();
 	this->InitBackground();
+	this->InitPauseMenu();
 
 }
 
@@ -49,18 +51,34 @@ void EditorState::RenderButtons(sf::RenderWindow* window)
 
 }
 
+void EditorState::InitPauseMenu()
+{
+	pause_menu.AddButton("Resume",  250.0f, "Resume");
+	pause_menu.AddButton("Options", window.get()->getSize().y - 500.0f, "Options");
+	pause_menu.AddButton("Quit",    window.get()->getSize().y - 250.0f, "Quit");
+}
+
+void EditorState::UpdatePauseMenuInput()
+{
+	if (pause_menu.IsButtonPressed("Quit"))     bQuit = true;
+
+	if (pause_menu.IsButtonPressed("Resume"))	bPause = false;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("QUIT"))) && KeyTime())
+	{
+		if (bPause) bPause = false;
+	}
+
+	if (pause_menu.IsButtonPressed("Options"))
+	{
+		states->push(make_unique<SettingsState>(window, supported_keys, states));
+	}
+};
+
+
 void EditorState::EndState()
 {
-	std::ofstream ofs("Config/keybinds.ini");
-	if (ofs.is_open())
-	{
-		ofs << "MOVE_LEFT "			 << current_keybinds["MOVE_LEFT"]
-			<< "\n" << "MOVE_RIGHT " << current_keybinds["MOVE_RIGHT"]
-			<< "\n" << "MOVE_UP "    << current_keybinds["MOVE_UP"]
-			<< "\n" << "MOVE_DOWN "  << current_keybinds["MOVE_DOWN"]
-			<< "\n" << "QUIT "		 << current_keybinds["QUIT"];
-	}
-	ofs.close();
+
 }
 
 void EditorState::InitKeybinds()
@@ -89,22 +107,38 @@ void EditorState::UpdateMousePos()
 
 void EditorState::UpdateInput(const float& frame_time)
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("QUIT"))))
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("QUIT"))))
+	//{
+	//	bQuit = true;
+	//}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds.at("QUIT"))) && KeyTime())
 	{
-		bQuit = true;
+		if (!bPause) bPause = true;
 	}
 }
 
 void EditorState::Update(const float& frame_time)
 {
-	this->UpdateInput(frame_time);
+	this->UpdateKeyTime(frame_time);
 	this->UpdateMousePos();
-	this->UpdateButtons(frame_time);
+	if (bPause)
+	{
+		this->UpdatePauseMenuInput();
+		pause_menu.Update(mouse_pos_view, frame_time);
+	}
+	else
+	{
+		this->UpdateInput(frame_time);
+		this->UpdateButtons(frame_time);
+	}
 }
 
 void EditorState::Render(sf::RenderWindow* window)
 {
 	this->window->draw(background_s);
+	map.Render(window);
+
 	this->RenderButtons(window);
 
 
@@ -116,6 +150,8 @@ void EditorState::Render(sf::RenderWindow* window)
 	string mouse_pos = "X: " + to_string((int)mouse_pos_view.x) + " Y: " + to_string((int)mouse_pos_view.y);
 	mouse_text.setString(mouse_pos);
 
+	if (bPause) pause_menu.Render(window);
+	
 
 	this->window->draw(mouse_text);
 }
