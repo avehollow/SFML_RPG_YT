@@ -224,5 +224,84 @@ namespace gui
 
 		window->draw(text);
 	}
+
+
+	/// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ///
+	//  //////												TEXTURE																	    //////  //
+	//  //////													SELECTOR															    //////  //
+	/// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ///
+	TextureSelector::TextureSelector(float x, float y, float width, float height, float grid_size)
+	{
+		bounds.setSize(sf::Vector2f(width, height));
+		bounds.setPosition(x, y);
+		bounds.setFillColor(sf::Color(50, 50, 50, 100));
+		bounds.setOutlineColor(sf::Color(250, 250, 250, 200));
+		bounds.setOutlineThickness(1);
+
+		texture_sheet.setPosition(x, y);
+
+		this->grid_size = grid_size;
+
+		selector.setPosition(x, y);
+		selector.setSize(sf::Vector2f(grid_size, grid_size));
+		selector.setFillColor(sf::Color::Transparent);
+		selector.setOutlineColor(sf::Color::Red);
+		selector.setOutlineThickness(2);
+	}
+	void TextureSelector::Update(const float& frame_time, const sf::Vector2f mouse_pos_window)
+	{
+		if (bounds.getGlobalBounds().contains(mouse_pos_window))
+			active = true;
+		else
+			active = false;
+
+		if (active)
+		{
+			// Oblicz dlugoœæ a póŸniej podziel aby sprawdziæ który to kafelek
+			mouse_pos.x = (mouse_pos_window.x - (int)bounds.getPosition().x ) / (unsigned)grid_size;
+			mouse_pos.y = (mouse_pos_window.y - (int)bounds.getPosition().y ) / (unsigned)grid_size;
+			
+			// Przesuñ od pocz¹tku o odpowiedni¹ dlugoœæ (w pikselach) w osi X i Y
+			selector.setPosition(
+				bounds.getPosition().x + (mouse_pos.x * grid_size),
+				bounds.getPosition().y + (mouse_pos.y * grid_size)
+			);
+		}
+		
+	}
+
+	void TextureSelector::Render(sf::RenderWindow* window)
+	{
+		if (window)
+		{
+			window->draw(bounds);
+			window->draw(texture_sheet);
+			window->draw(selector);
+		}
+	}
+
+	void TextureSelector::SetTexture(sf::Texture* texture)
+	{
+		texture_sheet.setTexture(*texture);
+		if (texture_sheet.getGlobalBounds().width > bounds.getGlobalBounds().width)
+		{
+			texture_sheet.setTextureRect(sf::IntRect(
+				0,
+				0,
+				bounds.getGlobalBounds().width,
+				texture_sheet.getGlobalBounds().height
+			));
+		}
+
+		if (texture_sheet.getGlobalBounds().height > bounds.getGlobalBounds().height)
+		{
+			texture_sheet.setTextureRect(sf::IntRect(
+				0,
+				0,
+				texture_sheet.getGlobalBounds().width,
+				bounds.getGlobalBounds().height
+			));
+		}
+	}
 }
 

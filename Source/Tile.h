@@ -2,7 +2,9 @@
 
 class Tile
 {
-private:
+//private:
+public:
+	sf::Texture* texture;
 	sf::RectangleShape shape;
 
 public:

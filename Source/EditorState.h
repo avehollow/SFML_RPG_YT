@@ -15,9 +15,17 @@ private:
 	std::map<string, unique_ptr<gui::Button>> buttons;
 	PauseState pause_menu;
 	TileMap map;
+	gui::TextureSelector texture_selector;
 
+
+	sf::RectangleShape selected_tile;
+	sf::Texture texture_sheet;
+
+	sf::IntRect texture_rect;
+
+	short layer = 0;
 public:
-	EditorState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	EditorState(StateData* state_data);
 	virtual ~EditorState();
 
 	void InitButtons();

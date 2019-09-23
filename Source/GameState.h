@@ -12,7 +12,7 @@ private:
 	TileMap map;
 
 public:
-	GameState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	GameState(StateData* state_data);
 	virtual ~GameState();
 
 	void InitTextures();

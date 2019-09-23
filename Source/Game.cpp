@@ -3,8 +3,9 @@
 
 
 Game::Game()
-	: state_data({50.0f,main_window,&supported_keys,&states}) //AVE Klasa agregat
+	: state_data({10,10,100.0f,main_window,&supported_keys,&states}) //AVE Klasa agregat
 {
+
 }
 
 Game::~Game()
@@ -48,6 +49,8 @@ void Game::Render()
 void Game::Run()
 {
 	this->InitMainWindow();
+	this->state_data.window = main_window;
+
 	// Init Keys must be before InitStates()
 	this->InitKeys();
 	this->InitStates();
@@ -122,7 +125,7 @@ void Game::InitStates()
 {
 	//Before ->> STATE constructor have &weak_ptr as 1 parametr and we cant pass as argument a shared_ptr because shared is not can be ref to weak_ptr
 	//weak_ptr<sf::RenderWindow> window = main_window;
-	states.push(make_unique<MainMenu> (main_window, &supported_keys, &states));
+	states.push(make_unique<MainMenu> (&state_data));
 }
 
 void Game::InitKeys()

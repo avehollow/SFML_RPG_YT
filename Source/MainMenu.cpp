@@ -2,8 +2,8 @@
 #include "MainMenu.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
-MainMenu::MainMenu(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
-	: State(window, supported_keys, states)
+MainMenu::MainMenu(StateData* state_data)
+	: State(state_data)
 {
 	this->InitFonts();
 	this->InitKeybinds();
@@ -58,28 +58,16 @@ void MainMenu::UpdateButtons(const float& frame_time)
 
 
 
-	for (const auto& [name,button] : buttons)
-	{
+	for (const auto& [name,button] : buttons){
 		button->Update(mouse_pos_view, frame_time);
 	}
 
-	if (buttons.contains("New Game") && buttons.at("New Game")->IsPressed())
-	{
-		states->push(make_unique<GameState>(window, supported_keys, states)); // states and supported_keys is pointer
-	}
-	if (buttons.contains("Editor") && buttons.at("Editor")->IsPressed())
-	{
-		states->push(make_unique<EditorState>(window, supported_keys, states)); // states and supported_keys is pointer
-	}
-	if (buttons.contains("Options") && buttons.at("Options")->IsPressed())
-	{
-		states->push(make_unique<SettingsState>(window, supported_keys, states)); // states and supported_keys is pointer
-	}
+	if (buttons.contains("New Game") && buttons.at("New Game")->IsPressed()) states->push(make_unique<GameState>(state_data));                       
+	if (buttons.contains("Editor") && buttons.at("Editor")->IsPressed())     states->push(make_unique<EditorState>(state_data));
+	if (buttons.contains("Options") && buttons.at("Options")->IsPressed())   states->push(make_unique<SettingsState>(state_data));
 
-	if (buttons.contains("Quit") && buttons.at("Quit")->IsPressed())
-	{
-		this->bQuit = true;
-	}
+	if (buttons.contains("Quit") && buttons.at("Quit")->IsPressed()) this->bQuit = true;
+	
 }
 
 void MainMenu::RenderButtons(sf::RenderWindow* window)

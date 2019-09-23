@@ -3,15 +3,30 @@
 #include "SettingsState.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
-EditorState::EditorState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
-	: State(window, supported_keys, states)
+EditorState::EditorState(StateData* state_data)
+	: State(state_data)
 	, pause_menu(window.get(),font_dosis)
+	, map(&texture_sheet)
+	, texture_selector(10,10, 900, 200, 100)
 {
 	this->InitFonts();
 	this->InitKeybinds();
 	this->InitButtons();
 	this->InitBackground();
 	this->InitPauseMenu();
+
+
+	selected_tile.setOutlineColor(sf::Color::Red);
+	selected_tile.setOutlineThickness(1.0f);
+	selected_tile.setSize(sf::Vector2f(state_data->tile_size, state_data->tile_size));
+
+	texture_sheet.loadFromFile("Resource/Image/Sprites/Tiles/tilesheet1.png");
+	texture_selector.SetTexture(&texture_sheet);
+
+	texture_rect.height = 100;
+	texture_rect.width  = 100;
+	texture_rect.top    = 0;
+	texture_rect.left   = 0;
 
 }
 
@@ -71,8 +86,9 @@ void EditorState::UpdatePauseMenuInput()
 
 	if (pause_menu.IsButtonPressed("Options"))
 	{
-		states->push(make_unique<SettingsState>(window, supported_keys, states));
+		states->push(make_unique<SettingsState>(state_data));
 	}
+	
 };
 
 
@@ -103,6 +119,7 @@ void EditorState::InitKeybinds()
 void EditorState::UpdateMousePos()
 {
 	State::UpdateMousePos();
+	selected_tile.setPosition(mouse_pos_grid.x * state_data->tile_size, mouse_pos_grid.y * state_data->tile_size);
 }
 
 void EditorState::UpdateInput(const float& frame_time)
@@ -116,6 +133,51 @@ void EditorState::UpdateInput(const float& frame_time)
 	{
 		if (!bPause) bPause = true;
 	}
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && KeyTime())
+	{
+		map.AddTile(mouse_pos_grid.x, mouse_pos_grid.y, layer, texture_rect);
+	}
+	else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && KeyTime())
+	{
+		map.RemoveTile(mouse_pos_grid.x, mouse_pos_grid.y, layer);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) layer = 0;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) layer = 1;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) layer = 2;
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && KeyTime())
+	{
+		if (texture_rect.left - 100 >= 0)
+		{
+			texture_rect.left -= 100;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && KeyTime())
+	{
+		if (texture_rect.left + 100 <= texture_sheet.getSize().x - 100)
+		{
+			texture_rect.left += 100;
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && KeyTime())
+	{
+		if (texture_rect.top - 100 >= 0)
+		{
+			texture_rect.top -= 100;
+		}
+
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && KeyTime())
+	{
+		if (texture_rect.top + 100 <= texture_sheet.getSize().y - 100)
+		{
+			texture_rect.top += 100;
+		}
+	}
+	
+
 }
 
 void EditorState::Update(const float& frame_time)
@@ -131,7 +193,17 @@ void EditorState::Update(const float& frame_time)
 	{
 		this->UpdateInput(frame_time);
 		this->UpdateButtons(frame_time);
+		map.Update(frame_time);
+		texture_selector.Update(frame_time, mouse_pos_view);
 	}
+	selected_tile.setTexture(&texture_sheet);
+	selected_tile.setTextureRect(texture_rect);
+	selected_tile.setFillColor(sf::Color(
+		selected_tile.getFillColor().r,
+		selected_tile.getFillColor().g,
+		selected_tile.getFillColor().b,
+		100));
+
 }
 
 void EditorState::Render(sf::RenderWindow* window)
@@ -139,20 +211,30 @@ void EditorState::Render(sf::RenderWindow* window)
 	this->window->draw(background_s);
 	map.Render(window);
 
-	this->RenderButtons(window);
-
-
 	sf::Text mouse_text;
 	mouse_text.setPosition(sf::Vector2f(mouse_pos_view.x + 15, mouse_pos_view.y)); // +15 for better position. Now mouse dont cover a text
 	mouse_text.setFont(font_dosis);
 	mouse_text.setCharacterSize(15);
 
-	string mouse_pos = "X: " + to_string((int)mouse_pos_view.x) + " Y: " + to_string((int)mouse_pos_view.y);
+	string mouse_pos =  "X: "    + to_string((int)mouse_pos_view.x) + " Y: "  + to_string((int)mouse_pos_view.y);
+	       mouse_pos += "\nTX: " + to_string(mouse_pos_grid.x)      + " TY: " + to_string(mouse_pos_grid.y);
+		   mouse_pos += "\nL: "  + to_string(layer+1);
 	mouse_text.setString(mouse_pos);
-
-	if (bPause) pause_menu.Render(window);
+	mouse_text.setOutlineColor(sf::Color::Black);
+	mouse_text.setOutlineThickness(1);
 	
+	texture_selector.Render(window);
 
+	if (bPause)
+	{
+		pause_menu.Render(window);
+	}
+	else
+	{
+		this->RenderButtons(window);
+		window->draw(selected_tile);
+	}
+	
 	this->window->draw(mouse_text);
 }
 

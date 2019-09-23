@@ -3,8 +3,9 @@
 #include "SettingsState.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
-GameState::GameState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
-	: State(window, supported_keys, states), pause_menu(window.get(), font_dosis)
+GameState::GameState(StateData* state_data)
+	: State(state_data), pause_menu(window.get(), font_dosis)
+	, map(nullptr)
 {
 	this->InitKeybinds();
 	this->InitTextures();
@@ -56,7 +57,7 @@ void GameState::UpdatePauseMenuInput()
 
 	if (pause_menu.IsButtonPressed("Options"))
 	{
-		states->push(make_unique<SettingsState>(window, supported_keys, states));
+		states->push(make_unique<SettingsState>(state_data));
 	}
 	
 }

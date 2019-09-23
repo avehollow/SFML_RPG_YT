@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "SettingsState.h"
 
-SettingsState::SettingsState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states)
-	: State(window, supported_keys, states)
+SettingsState::SettingsState(StateData* state_data)
+	: State(state_data)
 	, video_modes(sf::VideoMode::getFullscreenModes())
 {
 	current_setting.width		   = 1920;

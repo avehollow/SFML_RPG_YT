@@ -9,7 +9,7 @@ private:
 
 	std::map<string, unique_ptr<gui::Button>> buttons;
 public:
-	MainMenu(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	MainMenu(StateData* state_data);
 	virtual ~MainMenu();
 
 	void InitButtons();

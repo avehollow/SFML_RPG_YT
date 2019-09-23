@@ -30,7 +30,7 @@ private:
 	Settings current_setting;
 	
 public:
-	SettingsState(shared_ptr<sf::RenderWindow> window, std::map<std::string, int>* supported_keys, std::stack<unique_ptr<State>>* states);
+	SettingsState(StateData* state_data);
 	virtual ~SettingsState();
 
 	void InitBackground();
