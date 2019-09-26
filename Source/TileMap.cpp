@@ -86,13 +86,14 @@ void TileMap::SaveToFile()
 				for (size_t z = 0; z < layers; z++)
 				{
 
-					int texture = map[x][y][z]->texture == nullptr ? 0 : 1;
+					output << map[x][y][z]->PlaceTileInfoToString();
+					/*int texture = map[x][y][z]->texture == nullptr ? 0 : 1;
 					output << texture 
 						   << " "
 						   << map[x][y][z]->shape.getTextureRect().left
 						   << " "
 						   << map[x][y][z]->shape.getTextureRect().top
-						   << " ";
+						   << " ";*/
 				}
 			}
 		}
@@ -106,16 +107,23 @@ void TileMap::LoadFromFile()
 	int tex = 0;
 	int l = 0;
 	int t = 0;
+	int b = 0;
+	int type = 0;
 
 	if (input.is_open())
 	{
 
 
 		input >> size_grid
-			>> size_x
-			>> size_y
-			>> layers;
+			  >> size_x
+			  >> size_y
+			  >> layers;
 
+		// textura
+		// kolizja
+		// typ
+		// left
+		// top
 
 		CreateMap();
 
@@ -125,11 +133,13 @@ void TileMap::LoadFromFile()
 			{
 				for (size_t z = 0; z < layers; z++)
 				{
-					input >> tex >> l >> t;
+					input >> tex >> b >> type >> l >> t;
 					if (tex == 1)
 					{
 						map[x][y][z]->texture = texture_sheet;
 					}
+					map[x][y][z]->type = t;
+					map[x][y][z]->bCollision = b;
 					map[x][y][z]->shape.setTexture(texture_sheet);
 					map[x][y][z]->shape.setTextureRect(sf::IntRect(l, t, 100, 100));
 				}

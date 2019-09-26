@@ -3,6 +3,8 @@
 
 
 Tile::Tile(float pos_x, float pos_y, size_t size)
+	: bCollision(false)
+	, type(5)
 {
 	shape.setSize(sf::Vector2f(size, size));
 	shape.setPosition(pos_x, pos_y);
@@ -28,4 +30,22 @@ void Tile::Render(sf::RenderWindow* window) const
 	{
 		window->draw(shape);
 	}
+}
+
+const std::string Tile::PlaceTileInfoToString()
+{
+	int t = (texture == nullptr ? 0 : 1);
+	std::stringstream ss;
+	ss  << t
+		<< " "
+		<< bCollision
+		<< " "
+		<< type
+		<< " "
+		<< shape.getTextureRect().left
+		<< " "
+		<< shape.getTextureRect().top
+		<< " ";
+		
+	return ss.str();
 }

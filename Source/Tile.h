@@ -1,11 +1,14 @@
 #pragma once
 
+
 class Tile
 {
 //private:
 public:
 	sf::Texture* texture;
 	sf::RectangleShape shape;
+	bool  bCollision;
+	short type;
 
 public:
 	Tile(float pos_x, float pos_y, size_t size);
@@ -13,5 +16,8 @@ public:
 
 	void Update(const float& frame_time);
 	void Render(sf::RenderWindow* window) const;
+
+
+	const std::string PlaceTileInfoToString();
 };
 
