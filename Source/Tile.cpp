@@ -15,7 +15,7 @@ Tile::~Tile()
 {
 	static int i = 0;
 	i++;
-	std::cout << "\nDelete tile number: " << i;
+	//std::cout << "\nDelete tile number: " << i;
 }
 
 void Tile::Update(const float& frame_time)

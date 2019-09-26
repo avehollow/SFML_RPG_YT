@@ -231,7 +231,13 @@ namespace gui
 	//  //////													SELECTOR															    //////  //
 	/// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// ///
 	TextureSelector::TextureSelector(float x, float y, float width, float height, float grid_size)
+		: active(false)
+		, hidden(false)
 	{
+		font_dosis.loadFromFile("Data/Fonts/Dosis-Light.ttf");
+
+		hide_button = std::make_unique<Button>(x+10, height*1.05, 50, 50, "HideTab", &font_dosis, 25, sf::Color(255, 0, 0, 255) );
+
 		bounds.setSize(sf::Vector2f(width, height));
 		bounds.setPosition(x, y);
 		bounds.setFillColor(sf::Color(50, 50, 50, 100));
@@ -250,7 +256,11 @@ namespace gui
 	}
 	void TextureSelector::Update(const float& frame_time, const sf::Vector2f mouse_pos_window)
 	{
-		if (bounds.getGlobalBounds().contains(mouse_pos_window))
+		hide_button->Update(mouse_pos_window, frame_time);
+		if (hide_button->IsPressed())
+			hidden = !hidden;
+
+		if (bounds.getGlobalBounds().contains(mouse_pos_window) && !hidden)
 			active = true;
 		else
 			active = false;
@@ -266,17 +276,34 @@ namespace gui
 				bounds.getPosition().x + (mouse_pos.x * grid_size),
 				bounds.getPosition().y + (mouse_pos.y * grid_size)
 			);
+
+				texture_rect.width  = 100;
+				texture_rect.height = 100;
+				texture_rect.left  = (selector.getPosition().x - bounds.getPosition().x) ;
+				texture_rect.top   = (selector.getPosition().y - bounds.getPosition().y) ;
 		}
 		
+
 	}
 
 	void TextureSelector::Render(sf::RenderWindow* window)
 	{
 		if (window)
 		{
-			window->draw(bounds);
-			window->draw(texture_sheet);
-			window->draw(selector);
+			if (!hidden)
+			{
+				window->draw(bounds);
+				window->draw(texture_sheet);
+				if (active)
+				{
+					window->draw(selector);
+				}
+			}
+			else
+			{
+
+			}
+			hide_button->Render(window);
 		}
 	}
 

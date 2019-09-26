@@ -6,8 +6,8 @@
 EditorState::EditorState(StateData* state_data)
 	: State(state_data)
 	, pause_menu(window.get(),font_dosis)
-	, map(&texture_sheet)
-	, texture_selector(10,10, 900, 200, 100)
+	, map(&texture_sheet, state_data)
+	, texture_selector(10,10, 800, 200, 100)
 {
 	this->InitFonts();
 	this->InitKeybinds();
@@ -27,6 +27,14 @@ EditorState::EditorState(StateData* state_data)
 	texture_rect.width  = 100;
 	texture_rect.top    = 0;
 	texture_rect.left   = 0;
+
+	selected_tile.setFillColor(sf::Color(
+		selected_tile.getFillColor().r,
+		selected_tile.getFillColor().g,
+		selected_tile.getFillColor().b,
+		100));
+
+	map.LoadFromFile();
 
 }
 
@@ -136,7 +144,24 @@ void EditorState::UpdateInput(const float& frame_time)
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && KeyTime())
 	{
-		map.AddTile(mouse_pos_grid.x, mouse_pos_grid.y, layer, texture_rect);
+		if (texture_selector.active)
+		{
+			texture_rect = texture_selector.texture_rect;
+
+
+			selected_tile.setTexture(&texture_sheet);
+			selected_tile.setTextureRect(texture_selector.texture_rect);
+
+			selected_tile.setFillColor(sf::Color(
+				selected_tile.getFillColor().r,
+				selected_tile.getFillColor().g,
+				selected_tile.getFillColor().b,
+				100));
+		}
+		else
+		{
+			map.AddTile(mouse_pos_grid.x, mouse_pos_grid.y, layer, texture_rect);
+		}
 	}
 	else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && KeyTime())
 	{
@@ -146,26 +171,39 @@ void EditorState::UpdateInput(const float& frame_time)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) layer = 0;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) layer = 1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) layer = 2;
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && KeyTime())
+	{
+		layer++;
+		layer = layer > 2? 0 : layer;
+	}
+
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && KeyTime())
 	{
 		if (texture_rect.left - 100 >= 0)
 		{
-			texture_rect.left -= 100;
+			texture_selector.texture_rect.left -= 100;
+			selected_tile.setTextureRect(texture_selector.texture_rect);
+			texture_rect = texture_selector.texture_rect;
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && KeyTime())
 	{
 		if (texture_rect.left + 100 <= texture_sheet.getSize().x - 100)
 		{
-			texture_rect.left += 100;
+			texture_selector.texture_rect.left += 100;
+			selected_tile.setTextureRect(texture_selector.texture_rect);
+			texture_rect = texture_selector.texture_rect;
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && KeyTime())
 	{
 		if (texture_rect.top - 100 >= 0)
 		{
-			texture_rect.top -= 100;
+			texture_selector.texture_rect.top -= 100;
+			selected_tile.setTextureRect(texture_selector.texture_rect);
+			texture_rect = texture_selector.texture_rect;
 		}
 
 	}
@@ -173,7 +211,9 @@ void EditorState::UpdateInput(const float& frame_time)
 	{
 		if (texture_rect.top + 100 <= texture_sheet.getSize().y - 100)
 		{
-			texture_rect.top += 100;
+			texture_selector.texture_rect.top += 100;
+			selected_tile.setTextureRect(texture_selector.texture_rect);
+			texture_rect = texture_selector.texture_rect;
 		}
 	}
 	
@@ -186,6 +226,7 @@ void EditorState::Update(const float& frame_time)
 	this->UpdateMousePos();
 	if (bPause)
 	{
+		map.SaveToFile();
 		this->UpdatePauseMenuInput();
 		pause_menu.Update(mouse_pos_view, frame_time);
 	}
@@ -196,14 +237,6 @@ void EditorState::Update(const float& frame_time)
 		map.Update(frame_time);
 		texture_selector.Update(frame_time, mouse_pos_view);
 	}
-	selected_tile.setTexture(&texture_sheet);
-	selected_tile.setTextureRect(texture_rect);
-	selected_tile.setFillColor(sf::Color(
-		selected_tile.getFillColor().r,
-		selected_tile.getFillColor().g,
-		selected_tile.getFillColor().b,
-		100));
-
 }
 
 void EditorState::Render(sf::RenderWindow* window)
@@ -223,7 +256,6 @@ void EditorState::Render(sf::RenderWindow* window)
 	mouse_text.setOutlineColor(sf::Color::Black);
 	mouse_text.setOutlineThickness(1);
 	
-	texture_selector.Render(window);
 
 	if (bPause)
 	{
@@ -232,9 +264,14 @@ void EditorState::Render(sf::RenderWindow* window)
 	else
 	{
 		this->RenderButtons(window);
-		window->draw(selected_tile);
+
+		if (!texture_selector.active)
+		{
+			window->draw(selected_tile);
+		}
 	}
 	
+	texture_selector.Render(window);
 	this->window->draw(mouse_text);
 }
 

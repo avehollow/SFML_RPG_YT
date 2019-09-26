@@ -110,10 +110,14 @@ namespace gui
 
 		sf::RectangleShape selector;
 		sf::Vector2u mouse_pos;
-		sf::IntRect texture_rect;
 
 		float grid_size;
+
+		sf::Font font_dosis;
+		bool hidden;
+		std::unique_ptr<Button> hide_button;
 	public:
+		sf::IntRect texture_rect;
 		bool active;
 
 	public:

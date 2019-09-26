@@ -19,12 +19,20 @@ private:
 	size_t layers	 = 3;
 
 	sf::Texture* texture_sheet;
+
+private:
+	void CreateMap();
+
 public:
-	TileMap(sf::Texture* texture_sheet);
+	TileMap(sf::Texture* texture_sheet, class StateData* sd = nullptr);
 	~TileMap();
 
 	void AddTile(int pos_x, int pos_y, int pos_z, sf::IntRect rect);
 	void RemoveTile(int pos_x, int pos_y, int pos_z);
+
+	void SaveToFile();
+	void LoadFromFile();
+
 	void Update(const float& frame_time);
 	void Render(sf::RenderWindow* window);
 };
