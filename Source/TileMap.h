@@ -1,7 +1,6 @@
 #pragma once
 #include "Tile.h"
 
-
 class TileMap
 {
 private:
@@ -18,22 +17,30 @@ private:
 	size_t size_y    = 10;
 	size_t layers	 = 3;
 
+	// HLOG The map should manage the texture_sheet on its own
 	sf::Texture* texture_sheet;
 
 private:
 	void CreateMap();
 
 public:
+	// HLOG The map should manage the texture_sheet on its own
 	TileMap(sf::Texture* texture_sheet, class StateData* sd = nullptr);
 	~TileMap();
 
-	void AddTile(int pos_x, int pos_y, int pos_z, sf::IntRect rect);
+	void AddTile(int pos_x, int pos_y, int pos_z, sf::IntRect rect, bool collision = false);
 	void RemoveTile(int pos_x, int pos_y, int pos_z);
 
 	void SaveToFile();
 	void LoadFromFile();
 
-	void Update(const float& frame_time);
+	void Update(const float& frame_time, bool bShowCollision = false);
 	void Render(sf::RenderWindow* window);
+
+
+	void SetTextureSheet(sf::Texture* texture)
+	{
+		texture_sheet = texture;
+	}
 };
 

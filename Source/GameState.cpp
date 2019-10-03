@@ -14,6 +14,12 @@ GameState::GameState(StateData* state_data)
 	player = make_shared<Player>(20, 20, &sprites["PLAYER"], &textures["PLAYER"]);
 
 	this->InitPauseMenu();
+
+	texture_sheet.loadFromFile("Resource/Image/Sprites/Tiles/tilesheet1.png");
+	map.SetTextureSheet(&texture_sheet);
+	map.LoadFromFile();
+
+	this->InitView();
 }
 
 GameState::~GameState()
@@ -33,6 +39,17 @@ void GameState::InitSprites()
 	//sprites["PLAYER1"].setTexture(textures["PLAYER"]);
 	//sprites["PLAYER2"].setTexture(textures["PLAYER"]);
 	std::cout <<"\n\nCount sprites: "<< sprites.size();
+}
+
+void GameState::InitView()
+{
+	view.setSize(sf::Vector2f(window->getSize()));
+	view.setCenter(
+				   window->getSize().x / 2.0f,
+				   window->getSize().y / 2.0f
+	);
+	    std::cout << "\n Rozmiar okna X: " << window->getSize().x;
+		std::cout << "\n Rozmiar okna Y: " << window->getSize().y;
 }
 
 
@@ -62,6 +79,11 @@ void GameState::UpdatePauseMenuInput()
 	
 }
 
+void GameState::UpdateView()
+{
+	view.setCenter(player->GetPosition());
+}
+
 void GameState::EndState()
 {
 
@@ -87,9 +109,9 @@ void GameState::InitKeybinds()
 	ifs.close();
 }
 
-void GameState::UpdateMousePos()
+void GameState::UpdateMousePos(sf::View* view)
 {
-	State::UpdateMousePos();
+	State::UpdateMousePos(view);
 }
 
 void GameState::UpdateInput(const float& frame_time)
@@ -118,16 +140,17 @@ void GameState::UpdateInput(const float& frame_time)
 
 void GameState::Update(const float& frame_time)
 {
-	this->UpdateMousePos(); 
+	this->UpdateMousePos(&view); 
 	this->UpdateKeyTime(frame_time);
 
 	if (bPause)
 	{
 		this->UpdatePauseMenuInput();
-		pause_menu.Update(mouse_pos_view, frame_time);
+		pause_menu.Update(sf::Vector2f(mouse_pos_window), frame_time);
 	}
 	else
 	{ 
+		this->UpdateView();
 		this->UpdateInput(frame_time);
 		player->Update(frame_time);
 	}
@@ -135,10 +158,16 @@ void GameState::Update(const float& frame_time)
 
 void GameState::Render(sf::RenderWindow* target)
 {
+	if (!target)
+		return;
+	
+	target->setView(view);
+
 	map.Render(target);
 	player->Render(target);
 	if (bPause)
 	{
+		target->setView(window->getDefaultView());
 		pause_menu.Render(target);
 	}
 }

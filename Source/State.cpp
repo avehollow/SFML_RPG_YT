@@ -36,13 +36,23 @@ void State::UpdateKeyTime(const float& frame_time)
 	key_time += frame_time;
 }
 
-void State::UpdateMousePos()
+void State::UpdateMousePos(sf::View* view)
 {
-	//mouse_pos_screen = sf::Mouse::getPosition();
-	//mouse_pos_window = sf::Mouse::getPosition(*window);
+	mouse_pos_screen = sf::Mouse::getPosition();
+	mouse_pos_window = sf::Mouse::getPosition(*window);
 
-	mouse_pos_view.x = sf::Mouse::getPosition(*window).x;		// window->mapPixelToCoords(sf::Mouse::getPosition(*window));
-	mouse_pos_view.y = sf::Mouse::getPosition(*window).y;
+	if (view)
+	{
+		window->setView(*view);
+	}
+	else
+	{
+		window->setView(window->getDefaultView());
+	}
+
+	mouse_pos_view.x = window->mapPixelToCoords(sf::Mouse::getPosition(*window)).x;
+	mouse_pos_view.y = window->mapPixelToCoords(sf::Mouse::getPosition(*window)).y;
+
 
 	mouse_pos_grid.x = ((int)mouse_pos_view.x) / state_data->tile_size;
 	mouse_pos_grid.y = ((int)mouse_pos_view.y) / state_data->tile_size;

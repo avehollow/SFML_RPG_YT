@@ -39,7 +39,7 @@ TileMap::~TileMap()
 {
 }
 
-void TileMap::AddTile(int pos_x, int pos_y, int pos_z, sf::IntRect rect)
+void TileMap::AddTile(int pos_x, int pos_y, int pos_z, sf::IntRect rect, bool collision)
 {
 	if (pos_x >= 0 && pos_x < size_x &&
 		pos_y >= 0 && pos_y < size_y &&
@@ -48,6 +48,7 @@ void TileMap::AddTile(int pos_x, int pos_y, int pos_z, sf::IntRect rect)
 		map[pos_x][pos_y][pos_z]->texture = texture_sheet;
 		map[pos_x][pos_y][pos_z]->shape.setTexture(texture_sheet);
 		map[pos_x][pos_y][pos_z]->shape.setTextureRect(rect);
+		map[pos_x][pos_y][pos_z]->bCollision = !collision;
 	}
 }
 void TileMap::RemoveTile(int pos_x, int pos_y, int pos_z)
@@ -104,10 +105,10 @@ void TileMap::LoadFromFile()
 {
 	std::ifstream input("Data/Maps/map0.txt");
 
-	int tex = 0;
-	int l = 0;
-	int t = 0;
-	int b = 0;
+	int tex  = 0;
+	int l    = 0;
+	int t    = 0;
+	int b    = 0;
 	int type = 0;
 
 	if (input.is_open())
@@ -153,9 +154,21 @@ void TileMap::LoadFromFile()
 
 	input.close();
 }
-void TileMap::Update(const float& frame_time)
+void TileMap::Update(const float& frame_time, bool bShowCollision)
 {
-
+	for (const auto& column : map)
+	{
+		for (const auto& row : column)
+		{
+			for (const auto& tile : row)
+			{
+				if (tile.get())
+				{
+					tile->Update(frame_time, bShowCollision);
+				}
+			}
+		}
+	}
 }
 
 void TileMap::Render(sf::RenderWindow* window)

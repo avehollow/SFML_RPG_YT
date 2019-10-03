@@ -59,14 +59,15 @@ void MainMenu::UpdateButtons(const float& frame_time)
 
 
 	for (const auto& [name,button] : buttons){
-		button->Update(mouse_pos_view, frame_time);
+		button->Update(sf::Vector2f(mouse_pos_window), frame_time);
 	}
 
-	if (buttons.contains("New Game") && buttons.at("New Game")->IsPressed()) states->push(make_unique<GameState>(state_data));                       
-	if (buttons.contains("Editor") && buttons.at("Editor")->IsPressed())     states->push(make_unique<EditorState>(state_data));
-	if (buttons.contains("Options") && buttons.at("Options")->IsPressed())   states->push(make_unique<SettingsState>(state_data));
+	// HLOG contains
+	if (/*buttons.contains("New Game") &&*/ buttons.at("New Game")->IsPressed()) states->push(make_unique<GameState>(state_data));                       
+	if (/*buttons.contains("Editor") && */buttons.at("Editor")->IsPressed())     states->push(make_unique<EditorState>(state_data));
+	if (/*buttons.contains("Options") &&*/ buttons.at("Options")->IsPressed())   states->push(make_unique<SettingsState>(state_data));
 
-	if (buttons.contains("Quit") && buttons.at("Quit")->IsPressed()) this->bQuit = true;
+	if (/*buttons.contains("Quit") &&*/ buttons.at("Quit")->IsPressed()) this->bQuit = true;
 	
 }
 
@@ -112,7 +113,7 @@ void MainMenu::InitKeybinds()
 	ifs.close();
 }
 
-void MainMenu::UpdateMousePos()
+void MainMenu::UpdateMousePos(sf::View* view)
 {
 	State::UpdateMousePos();
 }

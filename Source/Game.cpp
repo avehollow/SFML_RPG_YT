@@ -3,7 +3,7 @@
 
 
 Game::Game()
-	: state_data({21,11,100.0f,main_window,&supported_keys,&states}) //AVE Klasa agregat
+	: state_data({51,51,100.0f,main_window,&supported_keys,&states}) //AVE Klasa agregat
 {
 
 }

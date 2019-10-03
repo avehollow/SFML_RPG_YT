@@ -30,8 +30,8 @@ protected:
 	map<string, sf::Texture>        textures;
 	map<string, sf::Sprite>         sprites;
 	
-	//sf::Vector2i mouse_pos_screen;
-	//sf::Vector2i mouse_pos_window;
+	sf::Vector2i mouse_pos_screen;
+	sf::Vector2i mouse_pos_window;
 	sf::Vector2f mouse_pos_view;
 	sf::Vector2i mouse_pos_grid;
 
@@ -60,7 +60,7 @@ public:
 
 	virtual bool KeyTime();
 	virtual void UpdateKeyTime(const float& frame_time);
-	virtual void UpdateMousePos();
+	virtual void UpdateMousePos(sf::View* view = nullptr);
 	virtual void EndState()									  = 0;
 	virtual void InitKeybinds()								  = 0;
 	virtual void UpdateInput(const float& frame_time)		  = 0;

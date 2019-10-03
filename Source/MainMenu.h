@@ -19,9 +19,9 @@ public:
 
 	void InitBackground();
 	void InitFonts();
-	void EndState()								 override;
-	void InitKeybinds()							 override;
-	void UpdateMousePos()						 override;
+	void EndState()								      override;
+	void InitKeybinds()							      override;
+	void UpdateMousePos(sf::View* view = nullptr)	  override;
 
 	void UpdateInput(const float& frame_time)		  override;
 	void Update(const float& frame_time)			  override;

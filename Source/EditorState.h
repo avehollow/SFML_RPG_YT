@@ -23,7 +23,12 @@ private:
 
 	sf::IntRect texture_rect;
 
-	short layer = 0;
+	short layer          = 0;
+	bool  bAddCollision  = false;
+	bool  bShowCollision = false;
+
+	sf::View view;
+	float camera_speed = 1500;
 public:
 	EditorState(StateData* state_data);
 	virtual ~EditorState();
@@ -40,7 +45,7 @@ public:
 	void InitFonts();
 	void EndState()								 override;
 	void InitKeybinds()							 override;
-	void UpdateMousePos()						 override;
+	void UpdateMousePos(sf::View* view = nullptr)override;
 
 	void UpdateInput(const float& frame_time)		  override;
 	void Update(const float& frame_time)			  override;

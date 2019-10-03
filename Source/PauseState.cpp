@@ -49,7 +49,8 @@ PauseState::~PauseState()
 
 bool PauseState::IsButtonPressed(std::string_view key)
 {
-	if (buttons.contains(key.data()))
+	// HLOG contains
+	if (/*buttons.contains(key.data())*/ 1)
 		return buttons[key.data()].get()->IsPressed();
 	else
 		return false;

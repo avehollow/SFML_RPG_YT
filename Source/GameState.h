@@ -6,9 +6,14 @@
 class GameState : public State
 {
 private:
+	sf::View view;
+	sf::RenderTexture render_texture;
+	sf::Sprite render_all_world;
+
 	PauseState pause_menu;
 	shared_ptr<Player> player;
 
+	sf::Texture texture_sheet;
 	TileMap map;
 
 public:
@@ -17,14 +22,16 @@ public:
 
 	void InitTextures();
 	void InitSprites();
+	void InitView();
 	
 	void InitPauseMenu();
 	void UpdatePauseMenuInput();
+	void UpdateView();
 
 
-	void EndState()			override;
-	void InitKeybinds()		override;
-	void UpdateMousePos()	override;
+	void EndState()									  override;
+	void InitKeybinds()								  override;
+	void UpdateMousePos(sf::View* view = nullptr)	  override;
 
 	void UpdateInput(const float& frame_time)		  override;
 	void Update(const float& frame_time)			  override;

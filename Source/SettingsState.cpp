@@ -109,25 +109,27 @@ void SettingsState::UpdateGui(const float& frame_time)
 {
 	for (const auto& [name,button] : buttons)
 	{
-		button->Update(mouse_pos_view, frame_time);
+		button->Update(sf::Vector2f(mouse_pos_window), frame_time);
 	}
 
 	for (const auto& [name, droplist] : drop_lists)
 	{
-		droplist->Update(mouse_pos_view, frame_time);
+		droplist->Update(sf::Vector2f(mouse_pos_window), frame_time);
 	}
 
-	if (buttons.contains("Back") && buttons.at("Back")->IsPressed())
+	// HLOG Contains
+	if (/*buttons.contains("Back") &&*/ buttons.at("Back")->IsPressed())
 	{
 		this->EndState();
 		this->bQuit = true;
 	}
 	
 
-
-	if (buttons.contains("Apply") && buttons["Apply"]->IsPressed())
+	// HLOG Contains
+	if (/*buttons.contains("Apply") &&*/ buttons["Apply"]->IsPressed())
 	{
-		if (drop_lists.contains("Fullscreen"))
+		// HLOG Contains
+		if (/*drop_lists.contains("Fullscreen")*/ 1)
 		{
 			string text = drop_lists["Fullscreen"]->GetActiveElement()->text.getString().toAnsiString();
 
@@ -136,8 +138,8 @@ void SettingsState::UpdateGui(const float& frame_time)
 			else
 				current_setting.bFullScreen = false;
 		}
-
-		if (drop_lists.contains("Resolution"))
+		// HLOG Contains
+		if (/*drop_lists.contains("Resolution")*/ 1)
 		{
 			string text = drop_lists["Resolution"]->GetActiveElement()->text.getString().toAnsiString();
 			size_t _idx = 0;
@@ -185,7 +187,8 @@ void SettingsState::EndState()
 			<< "\nMOVE_RIGHT " << current_keybinds["MOVE_RIGHT"]
 			<< "\nMOVE_UP " << current_keybinds["MOVE_UP"]
 			<< "\nMOVE_DOWN " << current_keybinds["MOVE_DOWN"]
-			<< "\nQUIT " << current_keybinds["QUIT"];
+			<< "\nQUIT " << current_keybinds["QUIT"]
+			<< "\nTOGGLE " << current_keybinds["TOGGLE"];
 	}
 	ofs.close();
 

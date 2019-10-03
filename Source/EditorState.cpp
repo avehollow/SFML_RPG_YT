@@ -36,6 +36,12 @@ EditorState::EditorState(StateData* state_data)
 
 	map.LoadFromFile();
 
+	view.setSize(sf::Vector2f(window->getSize()));
+	view.setCenter(
+					window->getSize().x / 2,
+					window->getSize().y / 2
+				  );
+
 }
 
 EditorState::~EditorState()
@@ -124,9 +130,9 @@ void EditorState::InitKeybinds()
 	ifs.close();
 }
 
-void EditorState::UpdateMousePos()
+void EditorState::UpdateMousePos(sf::View* view)
 {
-	State::UpdateMousePos();
+	State::UpdateMousePos(view);
 	selected_tile.setPosition(mouse_pos_grid.x * state_data->tile_size, mouse_pos_grid.y * state_data->tile_size);
 }
 
@@ -160,7 +166,8 @@ void EditorState::UpdateInput(const float& frame_time)
 		}
 		else
 		{
-			map.AddTile(mouse_pos_grid.x, mouse_pos_grid.y, layer, texture_rect);
+			map.AddTile(mouse_pos_grid.x, mouse_pos_grid.y, layer, texture_rect, bAddCollision);
+			map.Update(frame_time, bShowCollision);
 		}
 	}
 	else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && KeyTime())
@@ -216,6 +223,23 @@ void EditorState::UpdateInput(const float& frame_time)
 			texture_rect = texture_selector.texture_rect;
 		}
 	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(current_keybinds["TOGGLE"])) && KeyTime())
+	{
+		bAddCollision = !bAddCollision;
+		//map.Update(frame_time);
+	}	
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && KeyTime())
+	{
+		bShowCollision = !bShowCollision;
+		map.Update(frame_time, bShowCollision);
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && KeyTime()) view.move( camera_speed * frame_time,  0.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && KeyTime()) view.move(-camera_speed * frame_time,  0.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && KeyTime()) view.move( 0.0f,  -camera_speed * frame_time);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && KeyTime()) view.move( 0.0f,   camera_speed * frame_time);
+	
 	
 
 }
@@ -223,26 +247,31 @@ void EditorState::UpdateInput(const float& frame_time)
 void EditorState::Update(const float& frame_time)
 {
 	this->UpdateKeyTime(frame_time);
-	this->UpdateMousePos();
+	this->UpdateMousePos(&view);
 	if (bPause)
 	{
 		map.SaveToFile();
 		this->UpdatePauseMenuInput();
-		pause_menu.Update(mouse_pos_view, frame_time);
+		pause_menu.Update(sf::Vector2f(mouse_pos_window), frame_time);
 	}
 	else
 	{
 		this->UpdateInput(frame_time);
 		this->UpdateButtons(frame_time);
-		map.Update(frame_time);
-		texture_selector.Update(frame_time, mouse_pos_view);
+		texture_selector.Update(frame_time, sf::Vector2f(mouse_pos_window));
 	}
+
+	
 }
 
 void EditorState::Render(sf::RenderWindow* window)
 {
 	this->window->draw(background_s);
+
+	window->setView(view);
 	map.Render(window);
+
+	
 
 	sf::Text mouse_text;
 	mouse_text.setPosition(sf::Vector2f(mouse_pos_view.x + 15, mouse_pos_view.y)); // +15 for better position. Now mouse dont cover a text
@@ -257,6 +286,7 @@ void EditorState::Render(sf::RenderWindow* window)
 	mouse_text.setOutlineThickness(1);
 	
 
+	window->setView(window->getDefaultView());
 	if (bPause)
 	{
 		pause_menu.Render(window);
@@ -267,11 +297,35 @@ void EditorState::Render(sf::RenderWindow* window)
 
 		if (!texture_selector.active)
 		{
+			window->setView(view);
 			window->draw(selected_tile);
+			window->setView(window->getDefaultView());
 		}
 	}
 	
 	texture_selector.Render(window);
+
+	sf::Text t;
+	t.setCharacterSize(30);
+	t.setFont(font_dosis);
+	t.setPosition(window->getSize().x * 0.9, 0);
+	bAddCollision != 0 ? t.setString("Collision DISABLE") : t.setString("Collision ENABLE");
+	window->draw(t);
+
+	if (!bAddCollision)
+	{
+	    t.setCharacterSize(60);
+		t.setString("C");
+		t.setStyle(sf::Text::Bold);
+		t.setFillColor(sf::Color::Red);
+
+		t.setPosition(
+						sf::Mouse::getPosition(*window).x,
+						sf::Mouse::getPosition(*window).y
+		);
+		window->draw(t);
+	}
+
 	this->window->draw(mouse_text);
 }
 
