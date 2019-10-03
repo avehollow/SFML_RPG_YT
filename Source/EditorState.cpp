@@ -167,12 +167,14 @@ void EditorState::UpdateInput(const float& frame_time)
 		else
 		{
 			map.AddTile(mouse_pos_grid.x, mouse_pos_grid.y, layer, texture_rect, bAddCollision);
+			//map.AddTile(mouse_pos_window.x / 100, mouse_pos_window.y / 100, layer, texture_rect, bAddCollision);
 			map.Update(frame_time, bShowCollision);
 		}
 	}
 	else if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && KeyTime())
 	{
 		map.RemoveTile(mouse_pos_grid.x, mouse_pos_grid.y, layer);
+		//map.RemoveTile(mouse_pos_window.x / 100, mouse_pos_window.y / 100, layer);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) layer = 0;
@@ -272,9 +274,10 @@ void EditorState::Render(sf::RenderWindow* window)
 	map.Render(window);
 
 	
+	window->setView(window->getDefaultView());
 
 	sf::Text mouse_text;
-	mouse_text.setPosition(sf::Vector2f(mouse_pos_view.x + 15, mouse_pos_view.y)); // +15 for better position. Now mouse dont cover a text
+	mouse_text.setPosition(sf::Vector2f(mouse_pos_window.x + 15, mouse_pos_window.y)); // +15 for better position. Now mouse dont cover a text
 	mouse_text.setFont(font_dosis);
 	mouse_text.setCharacterSize(15);
 
@@ -286,7 +289,6 @@ void EditorState::Render(sf::RenderWindow* window)
 	mouse_text.setOutlineThickness(1);
 	
 
-	window->setView(window->getDefaultView());
 	if (bPause)
 	{
 		pause_menu.Render(window);
