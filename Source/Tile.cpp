@@ -54,6 +54,11 @@ void Tile::Render(sf::RenderWindow* window) const
 
 }
 
+bool Tile::intersects(const sf::FloatRect bounds) const
+{
+	return shape.getGlobalBounds().intersects(bounds) && bCollision;
+}
+
 const std::string Tile::PlaceTileInfoToString()
 {
 	int t = (texture == nullptr ? 0 : 1);

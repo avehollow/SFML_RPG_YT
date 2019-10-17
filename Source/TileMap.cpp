@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "TileMap.h"
-#include "State.h"
+#include "State.h" //include Entity.h
+
+
 
 
 using std::vector;
@@ -171,17 +173,175 @@ void TileMap::Update(const float& frame_time, bool bShowCollision)
 	}
 }
 
-void TileMap::Render(sf::RenderWindow* window)
+void TileMap::Render(sf::RenderWindow* window, Entity* entity)
 {
-	for (const auto& column:map)
+	////
+	// Tiles
+	////
+	if (entity)
 	{
-		for (const auto& row : column)
+
+
+		fromX = entity->GetPosition().x / size_grid - 1;
+		fromY = entity->GetPosition().y / size_grid - 1;
+
+		toX = entity->GetPosition().x / size_grid + 3;
+		toY = entity->GetPosition().y / size_grid + 3;
+
+
+		if (fromX < 0)
+			fromX = 0;
+
+		if (toX > map.size())
+			toX = map.size();
+
+		if (fromY < 0)
+			fromY = 0;
+
+		if (toY > map[0].size())
+			toY = map[0].size();
+
+		//std::cout << "\n " << fromX << " " << toX;
+		//std::cout << "\n " << fromY << " " << toY;
+		//system("cls");
+
+		for (size_t x = fromX; x < toX; x++)
 		{
-			for (const auto& tile : row)
+			for (size_t y = fromY; y < toY; y++)
 			{
-				if (tile.get())
+				for (size_t i = 0; i < 3; i++)
 				{
-					tile->Render(window);
+					map[x][y][i]->Render(window);
+
+				}
+			}
+		}
+	}
+	else
+	{
+		for (const auto& column:map)
+		{
+			for (const auto& row : column)
+			{
+				for (const auto& tile : row)
+				{
+					if (tile.get())
+					{
+						tile->Render(window);
+					}
+				}
+			}
+		}
+	}
+
+
+
+}
+
+void TileMap::UpdateCollision(Entity* entity)
+{
+
+	//// Left-Top Corner
+	//if (entity->hitbox_component->GetPosition().x < 0.0f)
+	//{
+	//	int temp_x = entity->hitbox_component->GetPosition().x - entity->GetPosition().x;
+	//	entity->SetPosition(0.0f - temp_x, entity->GetPosition().y);
+	//}
+
+	//if (entity->hitbox_component->GetPosition().y < 0.0f)
+	//{
+	//	int temp_y = entity->hitbox_component->GetPosition().y - entity->GetPosition().y;
+	//	entity->SetPosition(entity->GetPosition().x, 0.0f - temp_y);
+	//}
+
+	//// Right-Bottom Corner
+	//if (entity->hitbox_component->GetPosition().x + 
+	//	entity->hitbox_component->GetGlobalBounds().width > size_grid * map.size())
+	//{
+	//	int temp_x = (entity->hitbox_component->GetPosition().x + entity->hitbox_component->GetGlobalBounds().width) - entity->GetPosition().x;
+	//	entity->SetPosition(size_grid * map.size() - temp_x, entity->GetPosition().y);
+	//}
+
+	//if (entity->hitbox_component->GetPosition().y + 
+	//	entity->hitbox_component->GetGlobalBounds().height > size_grid * map[0].size())
+	//{
+	//	int temp_y = (entity->hitbox_component->GetPosition().y + entity->hitbox_component->GetGlobalBounds().height) - entity->GetPosition().y;
+	//	entity->SetPosition(entity->GetPosition().x, size_grid * map[0].size() - temp_y);
+	//}	
+
+
+
+
+		// IMPORTANT!
+		// enitity->GetPosition() return hitbox_component position because all stuff (like sprite) are pinned to hitbox
+
+		// IMPORTANT!
+	    // entity->SetPosition() set hitbox_component position! because all stuff (like sprite) are pinned to hitbox
+
+    // Left-Top Corner
+	if (entity->GetPosition().x < 0.0f)
+	{
+		entity->SetPosition(0.0f, entity->GetPosition().y);
+		entity->movement_component->SetVelocity(0.0f, 0.0f);
+	}
+
+	if (entity->GetPosition().y < 0.0f)
+	{
+		entity->SetPosition(entity->GetPosition().x, 0.0f);
+		entity->movement_component->SetVelocity(0.0f, 0.0f);
+	}
+
+	// Right-Bottom Corner
+	if (entity->GetPosition().x + 
+		entity->hitbox_component->GetGlobalBounds().width > size_grid * map.size())
+	{
+		entity->SetPosition(size_grid * map.size() - entity->hitbox_component->GetGlobalBounds().width, entity->GetPosition().y);
+		entity->movement_component->SetVelocity(0.0f, 0.0f);
+	}
+
+	if (entity->GetPosition().y + 
+		entity->hitbox_component->GetGlobalBounds().height > size_grid * map[0].size())
+	{
+		entity->SetPosition(entity->GetPosition().x, size_grid * map[0].size() - entity->hitbox_component->GetGlobalBounds().height);
+		entity->movement_component->SetVelocity(0.0f, 0.0f);
+	}
+
+	////
+	// Tiles
+	////
+
+	fromX = entity->GetPosition().x / size_grid - 2;
+	fromY = entity->GetPosition().y / size_grid - 2;
+
+	toX   = entity->GetPosition().x / size_grid + 2;
+	toY   = entity->GetPosition().y / size_grid + 2;
+
+
+	if (fromX < 0)
+		fromX = 0;
+
+	if (toX > map.size())
+		toX = map.size() - 2;
+
+	if (fromY < 0)
+		fromY = 0;
+
+	if (toY > map[0].size())
+		toY = map[0].size() - 2;
+	
+	//std::cout << "\n " << fromX << " " << toX;
+	//std::cout << "\n " << fromY << " " << toY;
+	//system("cls");
+	 
+	for (size_t x = fromX; x < toX; x++)
+	{
+		for (size_t y = fromY; y < toY; y++)
+		{
+			for (size_t i = 0; i < 3; i++)
+			{
+				if (map[x][y][i]->intersects(entity->GetSpriteGlobalBounds()))
+				{
+					entity->movement_component->SetVelocity(0.0f, 0.0f);
 				}
 			}
 		}

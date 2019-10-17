@@ -49,8 +49,8 @@ PauseState::~PauseState()
 
 bool PauseState::IsButtonPressed(std::string_view key)
 {
-	// HLOG contains
-	if (/*buttons.contains(key.data())*/ 1)
+
+	if (buttons.contains(key.data()))
 		return buttons[key.data()].get()->IsPressed();
 	else
 		return false;
@@ -70,11 +70,9 @@ void PauseState::AddButton(std::string_view key,float rel_y, std::string_view te
 
 void PauseState::Update(sf::Vector2f mos_pos, const float& frame_time)
 {
-
 	for (auto it = buttons.begin(); it != buttons.end(); it++)
 	{
 		it->second->Update(mos_pos, frame_time);
-
 	}
 }
 

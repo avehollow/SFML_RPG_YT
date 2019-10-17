@@ -81,7 +81,8 @@ void GameState::UpdatePauseMenuInput()
 
 void GameState::UpdateView()
 {
-	view.setCenter(player->GetPosition());
+	// HLOG Use intengers values to move view because using float causes flickering tile textures!
+	view.setCenter(std::floor(player->GetPosition().x), std::floor(player->GetPosition().y));
 }
 
 void GameState::EndState()
@@ -153,6 +154,7 @@ void GameState::Update(const float& frame_time)
 		this->UpdateView();
 		this->UpdateInput(frame_time);
 		player->Update(frame_time);
+		map.UpdateCollision(player.get());
 	}
 }
 
@@ -163,7 +165,7 @@ void GameState::Render(sf::RenderWindow* target)
 	
 	target->setView(view);
 
-	map.Render(target);
+	map.Render(target, player.get());
 	player->Render(target);
 	if (bPause)
 	{

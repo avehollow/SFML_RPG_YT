@@ -117,19 +117,18 @@ void SettingsState::UpdateGui(const float& frame_time)
 		droplist->Update(sf::Vector2f(mouse_pos_window), frame_time);
 	}
 
-	// HLOG Contains
-	if (/*buttons.contains("Back") &&*/ buttons.at("Back")->IsPressed())
+	
+	if (buttons.contains("Back") && buttons.at("Back")->IsPressed())
 	{
 		this->EndState();
 		this->bQuit = true;
 	}
 	
 
-	// HLOG Contains
-	if (/*buttons.contains("Apply") &&*/ buttons["Apply"]->IsPressed())
+	if (buttons.contains("Apply") && buttons["Apply"]->IsPressed())
 	{
-		// HLOG Contains
-		if (/*drop_lists.contains("Fullscreen")*/ 1)
+	
+		if (drop_lists.contains("Fullscreen"))
 		{
 			string text = drop_lists["Fullscreen"]->GetActiveElement()->text.getString().toAnsiString();
 
@@ -138,8 +137,8 @@ void SettingsState::UpdateGui(const float& frame_time)
 			else
 				current_setting.bFullScreen = false;
 		}
-		// HLOG Contains
-		if (/*drop_lists.contains("Resolution")*/ 1)
+		
+		if (drop_lists.contains("Resolution"))
 		{
 			string text = drop_lists["Resolution"]->GetActiveElement()->text.getString().toAnsiString();
 			size_t _idx = 0;

@@ -17,6 +17,7 @@ class HitboxComponent
 private:
 	ACCESS_POINTER  sf::Sprite*		   sprite;
 					sf::RectangleShape hitbox;
+					sf::FloatRect      next_position;
 	
 	float offset_x = 0.0f;
 	float offset_y = 0.0f;
@@ -26,10 +27,25 @@ public:
 	virtual ~HitboxComponent();
 
 
+
 	bool CheckIntersect(const sf::FloatRect& rect);
 
 
 	void Update();
 	void Render(sf::RenderWindow* window);
+
+
+	void SetPosition(const sf::Vector2f& pos);
+
+	sf::FloatRect GetNextPosition(const sf::Vector2f& velocity);
+
+	sf::FloatRect GetGlobalBounds()const
+	{
+		return hitbox.getGlobalBounds();
+	}
+	sf::Vector2f GetPosition()const
+	{
+		return hitbox.getPosition();
+	}
 };
 

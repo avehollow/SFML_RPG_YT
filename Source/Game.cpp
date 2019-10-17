@@ -10,7 +10,7 @@ Game::Game()
 
 Game::~Game()
 {
-
+	
 }
 
 void Game::Update()
@@ -19,12 +19,17 @@ void Game::Update()
 	
 	if (!states.empty()) 
 	{
-		states.top()->Update(frame_time);
-
-		if (states.top()->GetQuitFlag())
+		if (main_window->hasFocus())
 		{
-			states.top()->EndState();
-			states.pop();
+
+			states.top()->Update(frame_time);
+
+			if (states.top()->GetQuitFlag())
+			{
+				states.top()->EndState();
+				states.pop();
+			}
+
 		}
 	}
 	else
@@ -117,8 +122,10 @@ void Game::InitMainWindow()
 	
 	// AVE lock framerate 
 	// Bad idea
-     main_window->setFramerateLimit(60);
-	 main_window->setVerticalSyncEnabled(false);
+
+	//HLOG SetFramerateLimit
+     //main_window->setFramerateLimit(200);
+	 //main_window->setVerticalSyncEnabled(false);
 }
 
 void Game::InitStates()

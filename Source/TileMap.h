@@ -20,6 +20,15 @@ private:
 	// HLOG The map should manage the texture_sheet on its own
 	sf::Texture* texture_sheet;
 
+
+
+	// Culling
+	int fromX = 0;
+	int toX   = 0;
+	int fromY = 0;
+	int toY   = 0;
+	int layer = 0;
+
 private:
 	void CreateMap();
 
@@ -35,12 +44,14 @@ public:
 	void LoadFromFile();
 
 	void Update(const float& frame_time, bool bShowCollision = false);
-	void Render(sf::RenderWindow* window);
+	void Render(sf::RenderWindow* window, class Entity* entity);
 
 
 	void SetTextureSheet(sf::Texture* texture)
 	{
 		texture_sheet = texture;
 	}
+
+	void UpdateCollision(class Entity* entity);
 };
 

@@ -27,6 +27,7 @@ public:
 	void Render(sf::RenderWindow* window) const;
 
 
+	bool intersects(const sf::FloatRect bounds) const;
 	const std::string PlaceTileInfoToString();
 };
 

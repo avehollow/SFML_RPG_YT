@@ -53,6 +53,10 @@ public:
 	void SetMaxVelocity(const float& max_velocity) {
 		this->max_velocity = max_velocity;
 	}
+	void SetVelocity(float vel_x, float vel_y)
+	{
+		velocity = sf::Vector2f(vel_x, vel_y);
+	}
 
 	const bool IsIdle() const {
 		return (velocity.x == 0 && velocity.y == 0) ? true : false;

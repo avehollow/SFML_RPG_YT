@@ -66,6 +66,8 @@ void Player::Render(sf::RenderWindow* window)
 
 
 
+
+
 void Player::UpdateAnimation(const float& frame_time)
 {
 	if (animation_component.get()) 
@@ -129,5 +131,6 @@ void Player::UpdateAnimation(const float& frame_time)
 		}
 
 	}
-
 }
+
+

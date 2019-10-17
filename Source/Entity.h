@@ -12,7 +12,8 @@ private:
 protected:
 	ACCESS_POINTER sf::Sprite*  sprite  = nullptr; 
 	ACCESS_POINTER sf::Texture* texture = nullptr;
-	
+
+public:
 	unique_ptr<MovementComponent>  movement_component;
 	unique_ptr<AnimationComponent> animation_component;
 	unique_ptr<HitboxComponent>    hitbox_component;
@@ -26,6 +27,8 @@ public:
 	virtual void				CreateMovementComponent(float max_velocity, float acceleraton, float deceleration);
 	virtual void				CreateAnimationComponent(sf::Texture* sheet);
 	virtual void				CreateHitboxComponent(float offset_x, float offset_y, float width, float height);
+
+	sf::FloatRect GetSpriteGlobalBounds() const;
 
 public:
 	Entity();

@@ -3,7 +3,9 @@
 
 void Entity::SetPosition(const float x, const float y)
 {
-	if (sprite)
+	if (hitbox_component)
+		hitbox_component->SetPosition(sf::Vector2f(x, y));
+	else if (sprite)
 		sprite->setPosition(x, y);
 }
 
@@ -15,6 +17,9 @@ void Entity::SetTexture(sf::Texture* texture)
 
 const sf::Vector2f& Entity::GetPosition()
 {
+	if (hitbox_component)
+		return hitbox_component->GetPosition();
+
 	if (sprite)
 		return sprite->getPosition();
 	else
@@ -54,6 +59,11 @@ void Entity::CreateAnimationComponent(sf::Texture* sheet)
 void Entity::CreateHitboxComponent(float offset_x, float offset_y, float width, float height)
 {
 	hitbox_component = make_unique<HitboxComponent>(sprite, offset_x, offset_y, width, height);
+}
+
+sf::FloatRect Entity::GetSpriteGlobalBounds() const
+{
+	return sprite->getGlobalBounds();
 }
 
 Entity::Entity()

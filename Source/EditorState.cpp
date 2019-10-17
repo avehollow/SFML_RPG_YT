@@ -84,6 +84,7 @@ void EditorState::InitPauseMenu()
 {
 	pause_menu.AddButton("Resume",  250.0f, "Resume");
 	pause_menu.AddButton("Options", window.get()->getSize().y - 500.0f, "Options");
+	pause_menu.AddButton("Save",    window.get()->getSize().y * 0.60f,  "Save");
 	pause_menu.AddButton("Quit",    window.get()->getSize().y - 250.0f, "Quit");
 }
 
@@ -101,6 +102,11 @@ void EditorState::UpdatePauseMenuInput()
 	if (pause_menu.IsButtonPressed("Options"))
 	{
 		states->push(make_unique<SettingsState>(state_data));
+	}
+
+	if (pause_menu.IsButtonPressed("Save"))
+	{
+		map.SaveToFile();
 	}
 	
 };
@@ -237,10 +243,10 @@ void EditorState::UpdateInput(const float& frame_time)
 		map.Update(frame_time, bShowCollision);
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && KeyTime()) view.move( camera_speed * frame_time,  0.0f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && KeyTime()) view.move(-camera_speed * frame_time,  0.0f);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && KeyTime()) view.move( 0.0f,  -camera_speed * frame_time);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && KeyTime()) view.move( 0.0f,   camera_speed * frame_time);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && KeyTime()) view.move( std::floor(camera_speed * frame_time),  0.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && KeyTime()) view.move(-std::floor(camera_speed * frame_time),  0.0f);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && KeyTime()) view.move( 0.0f,  -std::floor(camera_speed * frame_time));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && KeyTime()) view.move( 0.0f,   std::floor(camera_speed * frame_time));
 	
 	
 
@@ -252,7 +258,6 @@ void EditorState::Update(const float& frame_time)
 	this->UpdateMousePos(&view);
 	if (bPause)
 	{
-		map.SaveToFile();
 		this->UpdatePauseMenuInput();
 		pause_menu.Update(sf::Vector2f(mouse_pos_window), frame_time);
 	}
@@ -271,7 +276,7 @@ void EditorState::Render(sf::RenderWindow* window)
 	this->window->draw(background_s);
 
 	window->setView(view);
-	map.Render(window);
+	map.Render(window, NULL);
 
 	
 	window->setView(window->getDefaultView());
