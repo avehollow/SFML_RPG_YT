@@ -28,7 +28,7 @@ public:
 	virtual void				CreateMovementComponent(float max_velocity, float acceleraton, float deceleration);
 	virtual void				CreateAnimationComponent(sf::Texture* sheet);
 	virtual void				CreateHitboxComponent(float offset_x, float offset_y, float width, float height);
-
+	sf::FloatRect GetNextPostionBounds(const float& frame_time) const;
 	sf::FloatRect GetSpriteGlobalBounds() const;
 
 

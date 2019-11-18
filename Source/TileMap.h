@@ -52,6 +52,6 @@ public:
 		texture_sheet = texture;
 	}
 
-	void UpdateCollision(class Entity* entity);
+	void UpdateCollision(class Entity* entity,const float& frame_time);
 };
 

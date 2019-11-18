@@ -42,9 +42,8 @@ public:
 	sf::FloatRect GetGlobalBounds()const
 	{
 			
-		sf::FloatRect b = hitbox.getGlobalBounds();
-	    sf::FloatRect a(b.left,b.top, b.width, b.height);
-		return a;
+		return hitbox.getGlobalBounds();
+
 	}
 	sf::Vector2f GetPosition()const
 	{

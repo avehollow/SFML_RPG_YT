@@ -69,6 +69,12 @@ void Entity::CreateHitboxComponent(float offset_x, float offset_y, float width, 
 	hitbox_component = make_unique<HitboxComponent>(sprite, offset_x, offset_y, width, height);
 }
 
+sf::FloatRect Entity::GetNextPostionBounds(const float &frame_time) const
+{
+
+	return hitbox_component->GetNextPosition(movement_component->GetVelocity() * frame_time);
+}
+
 sf::FloatRect Entity::GetSpriteGlobalBounds() const
 {
 	return sprite->getGlobalBounds();

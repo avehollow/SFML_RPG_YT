@@ -182,11 +182,11 @@ void TileMap::Render(sf::RenderWindow* window, Entity* entity)
 	{
 
 
-		fromX = entity->GetPosition().x / size_grid - 3;
-		fromY = entity->GetPosition().y / size_grid - 3;
+		fromX = entity->GetPosition().x / size_grid - 2;
+		fromY = entity->GetPosition().y / size_grid - 2;
 
-		toX = entity->GetPosition().x / size_grid + 4;
-		toY = entity->GetPosition().y / size_grid + 4;
+		toX = entity->GetPosition().x / size_grid + 3;
+		toY = entity->GetPosition().y / size_grid + 3;
 
 
 		if (fromX < 0)
@@ -238,7 +238,7 @@ void TileMap::Render(sf::RenderWindow* window, Entity* entity)
 
 }
 
-void TileMap::UpdateCollision(Entity* entity)
+void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 {
 
 		// IMPORTANT!
@@ -246,44 +246,44 @@ void TileMap::UpdateCollision(Entity* entity)
 
 		// IMPORTANT!
 	    // entity->SetPosition() set hitbox_component position! because all stuff (like sprite) are pinned to hitbox
-
+	
     // Left-Top Corner map
-	if (entity->GetPosition().x < 0.0f)
+	if (entity->GetNextPostionBounds(frame_time).left < 0.0f)
 	{
-		entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
 		entity->movement_component->StopVelocityX();
+		entity->SetPosition(0, entity->GetPosition().y);
 	}
 
-	if (entity->GetPosition().y < 0.0f)
+	if (entity->GetNextPostionBounds(frame_time).top < 0.0f)
 	{
-		entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
 		entity->movement_component->StopVelocityY();
+		entity->SetPosition(entity->GetPosition().x, 0);
 	}
 
 	// Right-Bottom Corner map
-	if (entity->GetPosition().x + 
+	if (entity->GetNextPostionBounds(frame_time).left+ 
 		entity->hitbox_component->GetGlobalBounds().width > size_grid * map.size())
 	{
-		entity->SetPosition(size_grid * map.size() - entity->hitbox_component->GetGlobalBounds().width, entity->hitbox_component->last_pos.top);
 		entity->movement_component->StopVelocityX();
+		entity->SetPosition(size_grid * map.size() - entity->hitbox_component->GetGlobalBounds().width, entity->GetPosition().y);
 	}
 
-	if (entity->GetPosition().y + 
+	if (entity->GetNextPostionBounds(frame_time).top +
 		entity->hitbox_component->GetGlobalBounds().height > size_grid * map[0].size())
 	{
-		entity->SetPosition(entity->hitbox_component->last_pos.left, size_grid * map[0].size() - entity->hitbox_component->GetGlobalBounds().height);
 		entity->movement_component->StopVelocityY();
+		entity->SetPosition(entity->GetPosition().x, size_grid * map[0].size() - entity->hitbox_component->GetGlobalBounds().height);
 	}
 
 	////
 	// Tiles
 	////
 
-	fromX = entity->GetPosition().x / size_grid - 3;
-	fromY = entity->GetPosition().y / size_grid - 3;
+	fromX = entity->GetPosition().x / size_grid - 2;
+	fromY = entity->GetPosition().y / size_grid - 2;
 
-	toX   = entity->GetPosition().x / size_grid + 4;
-	toY   = entity->GetPosition().y / size_grid + 4;
+	toX   = entity->GetPosition().x / size_grid + 3;
+	toY   = entity->GetPosition().y / size_grid + 3;
 
 
 	if (fromX < 0)
@@ -298,288 +298,68 @@ void TileMap::UpdateCollision(Entity* entity)
 	if (toY > map[0].size())
 		toY = map[0].size() - 2;
 	
-	//std::cout << "\n " << fromX << " " << toX;
-	//std::cout << "\n " << fromY << " " << toY;
-	//system("cls");
 	 
 	for (size_t x = fromX; x < toX; x++)
 	{
 		for (size_t y = fromY; y < toY; y++)
 		{
-			for (size_t i = 0; i < 3; i++)
+			for (size_t i = 0; i < 1; i++)
 			{
-				if (map[x][y][0]->intersects(entity->GetHitboxBounds()))
+				sf::FloatRect player_bounds = entity->GetHitboxBounds();
+				sf::FloatRect wall_bounds   = map[x][y][0]->shape.getGlobalBounds();
+				sf::FloatRect next_position = entity->GetNextPostionBounds(frame_time);
+				
+				if (map[x][y][0]->intersects(next_position))
 				{
 					map[x][y][0]->shape.setFillColor(sf::Color::Red);
 
-					sf::FloatRect wall_bounds   = map[x][y][0]->shape.getGlobalBounds();
-					sf::FloatRect player_bounds = entity->GetHitboxBounds();
 
 
-						//// Works fine
-						//if (entity->movement_component->GetVelocity().x != 0.0f) // Left
-						//{
-						//	entity->movement_component->StopVelocityX();
-						//	entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-
-						//	if (entity->movement_component->GetVelocity().y < 0)
-						//	{
-						//		sf::FloatRect b = entity->GetHitboxBounds();
-						//		sf::FloatRect a(b.left, b.top - 1, b.width, b.height);
-
-						//		if (!map[x][y][0]->intersects(a))
-						//		{
-						//			return;
-						//		}
-						//	}
-
-						//	if (entity->movement_component->GetVelocity().y > 0)
-						//	{
-						//		sf::FloatRect b = entity->GetHitboxBounds();
-						//		sf::FloatRect a(b.left, b.top + 1, b.width, b.height);
-
-						//		if (!map[x][y][0]->intersects(a))
-						//		{
-						//			return;
-						//		}
-						//	}
-						//}
-					
-						//if (entity->movement_component->GetVelocity().y != 0.0f) // Top
-						//{
-						//	entity->movement_component->StopVelocityY();
-						//	entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-
-						//	if (entity->movement_component->GetVelocity().x < 0)
-						//	{
-						//		sf::FloatRect b = entity->GetHitboxBounds();
-						//		sf::FloatRect a(b.left - 1, b.top, b.width, b.height);
-
-						//		if (!map[x][y][0]->intersects(a))
-						//		{
-						//			return;
-						//		}
-						//	}
-
-						//	if (entity->movement_component->GetVelocity().x > 0)
-						//	{
-						//		sf::FloatRect b = entity->GetHitboxBounds();
-						//		sf::FloatRect a(b.left + 1, b.top, b.width, b.height);
-
-						//		if (!map[x][y][0]->intersects(a))
-						//		{
-						//			return;
-						//		}
-						//	}
-						//}
-
-
-					// Right and Left
-					if (entity->movement_component->GetVelocity().x != 0 && entity->movement_component->GetVelocity().y == 0)
-					{
-						entity->movement_component->StopVelocityX();
-						entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-
-					}
-					// Down and Up
-					 else if (entity->movement_component->GetVelocity().y != 0 && entity->movement_component->GetVelocity().x == 0)
+					// bottom collision (ENTITY BOTTOM !!)
+					if (player_bounds.top < wall_bounds.top
+						&& player_bounds.top + player_bounds.height < wall_bounds.top +wall_bounds.height
+						&& player_bounds.left < wall_bounds.left + wall_bounds.width
+						&& player_bounds.left + player_bounds.width > wall_bounds.left)
 					{
 						entity->movement_component->StopVelocityY();
-						entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-					}
-					
-					
+						entity->SetPosition(player_bounds.left, wall_bounds.top - player_bounds.height);
+					}	
 
-					else if (entity->movement_component->GetVelocity().y > 0 && entity->movement_component->GetVelocity().x > 0)
+					// top
+					else if (player_bounds.top > wall_bounds.top
+						&& player_bounds.top + player_bounds.height > wall_bounds.top + wall_bounds.height
+						&& player_bounds.left < wall_bounds.left + wall_bounds.width
+						&& player_bounds.left + player_bounds.width > wall_bounds.left)
 					{
-						sf::FloatRect b = entity->GetHitboxBounds();
-						sf::FloatRect a(b.left + 1, b.top, b.width, b.height);
-
-						// Right
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityX();
-							entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-							//return;
-						}
-
-						b = entity->GetHitboxBounds();
-						a.left = b.left;
-						a.top += 1;
-
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityY();
-							entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-							return;
-						}
-
+						entity->movement_component->StopVelocityY();
+						entity->SetPosition(player_bounds.left, wall_bounds.top + wall_bounds.height);
 					}
 
 
-
-					else if (entity->movement_component->GetVelocity().y > 0 && entity->movement_component->GetVelocity().x < 0)
+					// right
+					if (player_bounds.left < wall_bounds.left
+						&& player_bounds.left + player_bounds.width < wall_bounds.left + wall_bounds.width
+						&& player_bounds.top < wall_bounds.top + wall_bounds.height
+						&& player_bounds.top + player_bounds.height > wall_bounds.top)
 					{
-						sf::FloatRect b = entity->GetHitboxBounds();
-						sf::FloatRect a(b.left - 1, b.top, b.width, b.height);
-
-						// Right
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityX();
-							entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-							//return;
-						}
-
-						b = entity->GetHitboxBounds();
-						a.left = b.left;
-						a.top += 1;
-
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityY();
-							entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-							 return;
-						}
-
+						entity->movement_component->StopVelocityX();
+						entity->SetPosition(wall_bounds.left - player_bounds.width, player_bounds.top);
 					}
 
-
-
-					else if (entity->movement_component->GetVelocity().y < 0 && entity->movement_component->GetVelocity().x < 0)
+					// left
+					else if (player_bounds.left > wall_bounds.left
+						&& player_bounds.left + player_bounds.width > wall_bounds.left + wall_bounds.width
+						&& player_bounds.top < wall_bounds.top + wall_bounds.height
+						&& player_bounds.top + player_bounds.height > wall_bounds.top)
 					{
-						sf::FloatRect b = entity->GetHitboxBounds();
-						sf::FloatRect a(b.left - 1, b.top, b.width, b.height);
-						// Right
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityX();
-							entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-							//return;
-						}
-
-						b = entity->GetHitboxBounds();
-						a.left = b.left;
-						a.top -= 1;
-
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityY();
-							entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-							return;
-						}
-
-					}
-
-					else if (entity->movement_component->GetVelocity().y < 0 && entity->movement_component->GetVelocity().x > 0)
-					{
-						sf::FloatRect b = entity->GetHitboxBounds();
-						sf::FloatRect a(b.left + 1, b.top, b.width, b.height);
-
-						// Right
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityX();
-							entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-							//return;
-						}
-
-						b = entity->GetHitboxBounds();
-						a.left = b.left;
-						a.top -= 1;
-
-						if (map[x][y][0]->intersects(a))
-						{
-							entity->movement_component->StopVelocityY();
-							entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-							return;
-						}
-
+						entity->movement_component->StopVelocityX();
+						entity->SetPosition(wall_bounds.left + wall_bounds.width, player_bounds.top);
 					}
 
 					
 
 
 				
-					
-
-					
-
-
-				
-
-
-				
-
-
-
-				//	// bottom collision (ENTITY BOTTOM !!)
-				//	if (player_bounds.top < wall_bounds.top
-				//		&& player_bounds.top + player_bounds.height > wall_bounds.top /*+ wall_bounds.height*/
-				///*		&& player_bounds.left < wall_bounds.left + wall_bounds.width
-				//		&& player_bounds.left + player_bounds.width > wall_bounds.left*/)
-				//	{
-				//		entity->movement_component->StopVelocityY();
-				//		entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-				//	}	
-
-				//	// top
-				//	if (player_bounds.top > wall_bounds.top
-				//		&& player_bounds.top + player_bounds.height > wall_bounds.top /*+ wall_bounds.height*/
-				//		/*&& player_bounds.left < wall_bounds.left + wall_bounds.width
-				//		&& player_bounds.left + player_bounds.width > wall_bounds.left*/)
-				//	{
-				//		entity->movement_component->StopVelocityY();
-				//		entity->SetPosition(entity->GetPosition().x, entity->hitbox_component->last_pos.top);
-				//	}
-
-				//	// left
-				//	if (/*player_bounds.top < wall_bounds.top
-				//		&& player_bounds.top + player_bounds.height < wall_bounds.top + wall_bounds.height
-				//		 player_bounds.left < wall_bounds.left + wall_bounds.width
-				//		&& player_bounds.left + player_bounds.width > wall_bounds.left*/
-				//		player_bounds.left < wall_bounds.left
-				//		&& player_bounds.left + player_bounds.width> wall_bounds.left)
-				//	{
-				//		entity->movement_component->StopVelocityX();
-				//		entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-				//	}
-
-				//	// right
-				//	if (/*player_bounds.top < wall_bounds.top
-				//		&& player_bounds.top + player_bounds.height < wall_bounds.top + wall_bounds.height
-				//		 player_bounds.left < wall_bounds.left + wall_bounds.width
-				//		&& player_bounds.left + player_bounds.width > wall_bounds.left*/
-				//		player_bounds.left > wall_bounds.left
-				//		&& player_bounds.left < wall_bounds.left + wall_bounds.width)
-				//	{
-				//		entity->movement_component->StopVelocityX();
-				//		entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-				//	}
-
-
-					////// left
-					////if (player_bounds.left > wall_bounds.left
-					////	&& player_bounds.left + player_bounds.width > wall_bounds.left+ wall_bounds.width
-					////	&& player_bounds.top < wall_bounds.top + wall_bounds.height
-					////	&& player_bounds.top + player_bounds.height > wall_bounds.top
-					////	)
-					////{
-					////	entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-					////	entity->movement_component->StopVelocityX();
-					////}
-					////
-					////// right
-					////if (player_bounds.left < wall_bounds.left
-					////	&& player_bounds.left + player_bounds.width < wall_bounds.left+ wall_bounds.width
-					////	&& player_bounds.top < wall_bounds.top + wall_bounds.height
-					////	&& player_bounds.top + player_bounds.height > wall_bounds.top
-					////	)
-					////{
-					////	entity->SetPosition(entity->hitbox_component->last_pos.left, entity->GetPosition().y);
-					////	entity->movement_component->StopVelocityX();
-					////}	
-					////
 
 
 				}

@@ -153,8 +153,9 @@ void GameState::Update(const float& frame_time)
 	{ 
 		this->UpdateView();
 		this->UpdateInput(frame_time);
+		//HLOG IMPORTANT!!! Check collision before update player
+		map.UpdateCollision(player.get(),frame_time);
 		player->Update(frame_time);
-		map.UpdateCollision(player.get());
 	}
 }
 
