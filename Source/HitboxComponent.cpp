@@ -7,11 +7,16 @@ HitboxComponent::HitboxComponent(sf::Sprite* sprite, float offset_x, float offse
 	, offset_y(offset_y)
 	, next_position{0,0, width, height}
 {
-	hitbox.setPosition(sprite->getPosition().x + offset_x, sprite->getPosition().y + offset_y);
 	hitbox.setSize(sf::Vector2f(width,height));
+	hitbox.setPosition(sprite->getPosition().x + offset_x, sprite->getPosition().y + offset_y);
 	hitbox.setFillColor(sf::Color::Transparent);
-	hitbox.setOutlineThickness(1.0f);
+	hitbox.setOutlineThickness(-1.0f);
 	hitbox.setOutlineColor(sf::Color::Green);
+
+	next_position.left   = 0.0f;
+	next_position.top    = 0.0f;
+	next_position.width  = width;
+	next_position.height = height;
 }
 
 HitboxComponent::~HitboxComponent()
@@ -26,6 +31,11 @@ bool HitboxComponent::CheckIntersect(const sf::FloatRect& rect)
 
 void HitboxComponent::Update()
 {
+	last_pos = hitbox.getGlobalBounds();
+
+	last_pos.left =  hitbox.getPosition().x;
+	last_pos.top  =  hitbox.getPosition().y;
+
 	hitbox.setPosition(sprite->getPosition().x + offset_x, sprite->getPosition().y + offset_y);
 }
 
@@ -37,14 +47,18 @@ void HitboxComponent::Render(sf::RenderWindow* window)
 
 void HitboxComponent::SetPosition(const sf::Vector2f& pos)
 {
+	//HLOG Some change
 	hitbox.setPosition(pos);
 	sprite->setPosition(hitbox.getPosition().x - offset_x, hitbox.getPosition().y - offset_y);
 }
 
 sf::FloatRect HitboxComponent::GetNextPosition(const sf::Vector2f& velocity)
 {
-	next_position.left += hitbox.getPosition().x + velocity.x;
-	next_position.top  += hitbox.getPosition().y + velocity.y;
+	//Dont work because in this part of we dont calculate the direction of moving ? Nooo?
+	//HLOG  NEED multiply by frame_time
+	next_position.left = hitbox.getPosition().x + velocity.x;
+	next_position.top  = hitbox.getPosition().y + velocity.y;
+
 
 	return next_position;
 }

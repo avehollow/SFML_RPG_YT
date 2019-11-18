@@ -11,7 +11,7 @@ Player::Player(float posX, float posY,  sf::Sprite* sprite, sf::Texture* texture
 
 	if (texture)
 		this->sprite->setTexture(*texture);
-	CreateMovementComponent(550.0f, 30.0f, 4.0f);
+	CreateMovementComponent(550.0f, 300.0f, 4.0f);
 
 	/*
 		B³¹d:
@@ -34,6 +34,7 @@ Player::Player(float posX, float posY,  sf::Sprite* sprite, sf::Texture* texture
 	//animation_component->AddAnimation("ATTACK_FAST",  this->texture, 0.00f,  4, 2, 13, 2, 384, 192);
 
 	CreateHitboxComponent(86.0f, 65.0f, 86.0f, 110.0f);
+	movement_component->SetHitBox(hitbox_component.get());
 }
 
 Player::~Player()

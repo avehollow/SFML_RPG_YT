@@ -41,11 +41,16 @@ public:
 
 	sf::FloatRect GetGlobalBounds()const
 	{
-		return hitbox.getGlobalBounds();
+			
+		sf::FloatRect b = hitbox.getGlobalBounds();
+	    sf::FloatRect a(b.left,b.top, b.width, b.height);
+		return a;
 	}
 	sf::Vector2f GetPosition()const
 	{
 		return hitbox.getPosition();
 	}
+
+	sf::FloatRect last_pos;
 };
 

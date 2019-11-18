@@ -31,7 +31,8 @@ public:
 		ATTACK
 	};
 private:
-	ACCESS_POINTER sf::Sprite* sprite = nullptr;
+	ACCESS_POINTER sf::Sprite*            sprite = nullptr;
+	ACCESS_POINTER class HitboxComponent* hitbox = nullptr;
 
 	float        max_velocity	  = 250.0f;
 	float		 acceleration	  = 0.0f;
@@ -68,5 +69,27 @@ public:
 	void Update(const float& frame_time);
 
 
+
+	void StopVelocity()
+	{
+		velocity.x = 0;
+		velocity.y = 0;
+	}
+
+	void StopVelocityX()
+	{
+		velocity.x = 0;
+	}
+	void StopVelocityY()
+	{
+		velocity.y = 0;
+	}
+
+	void SetHitBox(class HitboxComponent* hb)
+	{
+		hitbox = hb;
+	}
+
+	sf::FloatRect last_pos;
 };
 

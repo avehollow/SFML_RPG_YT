@@ -56,7 +56,7 @@ void Tile::Render(sf::RenderWindow* window) const
 
 bool Tile::intersects(const sf::FloatRect bounds) const
 {
-	return shape.getGlobalBounds().intersects(bounds) && bCollision;
+	return (bCollision && shape.getGlobalBounds().intersects(bounds));
 }
 
 const std::string Tile::PlaceTileInfoToString()

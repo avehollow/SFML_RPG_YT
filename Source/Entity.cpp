@@ -27,6 +27,14 @@ const sf::Vector2f& Entity::GetPosition()
 	
 }
 
+const sf::FloatRect Entity::GetHitboxBounds()
+{
+	if (hitbox_component)
+	{
+		return hitbox_component->GetGlobalBounds();
+	}
+}
+
 void Entity::move(const float& frame_time, float dir_x, float dir_y)
 {
 	//HACK Clamp values
@@ -64,6 +72,44 @@ void Entity::CreateHitboxComponent(float offset_x, float offset_y, float width, 
 sf::FloatRect Entity::GetSpriteGlobalBounds() const
 {
 	return sprite->getGlobalBounds();
+}
+
+void Entity::StopVelocity()
+{	
+	if(movement_component)	
+		movement_component->StopVelocity();
+}
+
+void Entity::StopVelocityX()
+{	
+	if(movement_component)
+		movement_component->StopVelocityX();
+}
+
+void Entity::StopVelocityY()
+{	
+	if(movement_component)
+		movement_component->StopVelocityY();
+}
+
+const sf::Vector2u Entity::GetGridPosition(size_t grid_size) const
+{
+	if (hitbox_component)
+	{
+		return sf::Vector2u(
+			(size_t)hitbox_component->GetPosition().x / grid_size,
+			(size_t)hitbox_component->GetPosition().y / grid_size
+		);
+	}
+
+	if (sprite)
+	{
+		return sf::Vector2u(
+			(size_t)sprite->getPosition().x / grid_size,
+			(size_t)sprite->getPosition().y / grid_size
+			);
+	}
+	return sf::Vector2u();
 }
 
 Entity::Entity()

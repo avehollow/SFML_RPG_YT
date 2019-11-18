@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MovementComponent.h"
+#include "HitboxComponent.h"
 
 MovementComponent::MovementComponent(sf::Sprite* sprite, float max_velocity, float acceleration, float deceleration)
 	: sprite(sprite)
@@ -89,6 +90,8 @@ void MovementComponent::Update(const float& frame_time)
 	}
 
 	if (sprite)
+	{
 		sprite->move(this->velocity * frame_time);
+	}
 }
 
