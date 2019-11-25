@@ -19,8 +19,8 @@ public:
 	unique_ptr<HitboxComponent>    hitbox_component;
 
 public:
-	virtual const sf::Vector2f&  GetPosition();
-	virtual const sf::FloatRect  GetHitboxBounds();
+	virtual sf::Vector2f	    GetPosition();
+	virtual sf::FloatRect	    GetHitboxBounds();
 	virtual void				SetPosition(const float x, const float y);
 	virtual	void				SetTexture(sf::Texture* texture);
 	virtual void				move(const float& frame_time, float dir_x, float dir_y);

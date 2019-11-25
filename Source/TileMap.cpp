@@ -59,7 +59,9 @@ void TileMap::RemoveTile(int pos_x, int pos_y, int pos_z)
 		pos_y >= 0 && pos_y < size_y &&
 		pos_z >= 0 && pos_z < layers)
 	{
-		 map[pos_x][pos_y][pos_z]->texture = nullptr;
+		 map[pos_x][pos_y][pos_z]->texture    = nullptr;
+		 map[pos_x][pos_y][pos_z]->bCollision = false;
+		 map[pos_x][pos_y][pos_z]->type       = 0;
 	}
 }
 void TileMap::SaveToFile() 
@@ -182,11 +184,11 @@ void TileMap::Render(sf::RenderWindow* window, Entity* entity)
 	{
 
 
-		fromX = entity->GetPosition().x / size_grid - 2;
-		fromY = entity->GetPosition().y / size_grid - 2;
+		fromX = entity->GetPosition().x / size_grid - 10;
+		fromY = entity->GetPosition().y / size_grid - 10;
 
-		toX = entity->GetPosition().x / size_grid + 3;
-		toY = entity->GetPosition().y / size_grid + 3;
+		toX = entity->GetPosition().x / size_grid + 15;
+		toY = entity->GetPosition().y / size_grid + 10;
 
 
 		if (fromX < 0)
@@ -212,7 +214,6 @@ void TileMap::Render(sf::RenderWindow* window, Entity* entity)
 				for (size_t i = 0; i < 3; i++)
 				{
 					map[x][y][i]->Render(window);
-
 				}
 			}
 		}
@@ -279,12 +280,16 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 	// Tiles
 	////
 
+
 	fromX = entity->GetPosition().x / size_grid - 2;
 	fromY = entity->GetPosition().y / size_grid - 2;
 
-	toX   = entity->GetPosition().x / size_grid + 3;
-	toY   = entity->GetPosition().y / size_grid + 3;
-
+	// AVE Sometimes issue with wrong calculate collision are made by wrong values HERE 
+	// If someone object has very large collision component them we need increase these values below
+	toX = entity->GetPosition().x / size_grid + (1 + (entity->hitbox_component->GetGlobalBounds().width) / 70);
+	toY = entity->GetPosition().y / size_grid + (2 + (entity->hitbox_component->GetGlobalBounds().height) / 70);
+	std::cout << "\n X:" << toX;
+	std::cout << "\n Y:" << toY;
 
 	if (fromX < 0)
 		fromX = 0;
@@ -303,15 +308,15 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 	{
 		for (size_t y = fromY; y < toY; y++)
 		{
-			for (size_t i = 0; i < 1; i++)
+			for (size_t i = 0; i < 3; i++)
 			{
 				sf::FloatRect player_bounds = entity->GetHitboxBounds();
-				sf::FloatRect wall_bounds   = map[x][y][0]->shape.getGlobalBounds();
+				sf::FloatRect wall_bounds   = map[x][y][i]->shape.getGlobalBounds();
 				sf::FloatRect next_position = entity->GetNextPostionBounds(frame_time);
 				
-				if (map[x][y][0]->intersects(next_position))
+				if (map[x][y][i]->intersects(next_position))
 				{
-					map[x][y][0]->shape.setFillColor(sf::Color::Red);
+					map[x][y][i]->shape.setFillColor(sf::Color::Red);
 
 
 
@@ -325,8 +330,8 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 						entity->SetPosition(player_bounds.left, wall_bounds.top - player_bounds.height);
 					}	
 
-					// top
-					else if (player_bounds.top > wall_bounds.top
+					// top (ENTITY TOP !!)
+					 else if (player_bounds.top > wall_bounds.top
 						&& player_bounds.top + player_bounds.height > wall_bounds.top + wall_bounds.height
 						&& player_bounds.left < wall_bounds.left + wall_bounds.width
 						&& player_bounds.left + player_bounds.width > wall_bounds.left)
@@ -336,7 +341,7 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 					}
 
 
-					// right
+					// right (ENTITY RIGHT !!)
 					if (player_bounds.left < wall_bounds.left
 						&& player_bounds.left + player_bounds.width < wall_bounds.left + wall_bounds.width
 						&& player_bounds.top < wall_bounds.top + wall_bounds.height
@@ -346,8 +351,8 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 						entity->SetPosition(wall_bounds.left - player_bounds.width, player_bounds.top);
 					}
 
-					// left
-					else if (player_bounds.left > wall_bounds.left
+					// left (ENTITY LEFT !!)
+					 else if (player_bounds.left > wall_bounds.left
 						&& player_bounds.left + player_bounds.width > wall_bounds.left + wall_bounds.width
 						&& player_bounds.top < wall_bounds.top + wall_bounds.height
 						&& player_bounds.top + player_bounds.height > wall_bounds.top)

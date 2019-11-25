@@ -81,7 +81,7 @@ void GameState::UpdatePauseMenuInput()
 
 void GameState::UpdateView()
 {
-	// HLOG Use intengers values to move view because using float causes flickering tile textures!
+	// AVE Use intengers values to move view because using float causes flickering tile textures!
 	view.setCenter(std::floor(player->GetPosition().x), std::floor(player->GetPosition().y));
 }
 
@@ -153,7 +153,7 @@ void GameState::Update(const float& frame_time)
 	{ 
 		this->UpdateView();
 		this->UpdateInput(frame_time);
-		//HLOG IMPORTANT!!! Check collision before update player
+		//AVE VERY IMPORTANT!!! Check collision before update player
 		map.UpdateCollision(player.get(),frame_time);
 		player->Update(frame_time);
 	}

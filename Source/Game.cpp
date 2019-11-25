@@ -3,7 +3,7 @@
 
 
 Game::Game()
-	: state_data({51,51,100.0f,main_window,&supported_keys,&states}) //AVE Klasa agregat
+	: state_data({ 51,51,100.0f,main_window,&supported_keys,&states }) //AVE Klasa agregat
 {
 
 }
@@ -19,18 +19,15 @@ void Game::Update()
 	
 	if (!states.empty()) 
 	{
-		if (main_window->hasFocus())
+	
+		states.top()->Update(frame_time);
+
+		if (states.top()->GetQuitFlag())
 		{
-
-			states.top()->Update(frame_time);
-
-			if (states.top()->GetQuitFlag())
-			{
-				states.top()->EndState();
-				states.pop();
-			}
-
+			states.top()->EndState();
+			states.pop();
 		}
+
 	}
 	else
 	{
@@ -62,9 +59,13 @@ void Game::Run()
 
 	while (main_window->isOpen())
 	{
-		this->CalcFrameTime();
-		this->Update();
-		this->Render();
+		if (main_window->hasFocus())
+		{
+			this->CalcFrameTime();
+			this->Update();
+		}
+
+			this->Render();
 	}
 }
 

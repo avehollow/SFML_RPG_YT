@@ -1,6 +1,6 @@
 #pragma once
 
-// HACK IMPORTANT Calculate gui item position based on the window size. LIKE Unreal engine 4 ANCHORS!!!
+// AVE IMPORTANT Calculate gui item position based on the window size. LIKE Unreal engine 4 ANCHORS!!!
 //		  window->getSize().x * 0.4f
 //		  window->getSize().y * 0.7f
 

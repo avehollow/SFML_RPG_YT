@@ -33,7 +33,7 @@ Player::Player(float posX, float posY,  sf::Sprite* sprite, sf::Texture* texture
 	animation_component->AddAnimation("ATTACK",       this->texture, 0.05f,  4, 2, 13, 2, 384, 192);
 	//animation_component->AddAnimation("ATTACK_FAST",  this->texture, 0.00f,  4, 2, 13, 2, 384, 192);
 
-	CreateHitboxComponent(86.0f, 65.0f, 86.0f, 110.0f);
+	CreateHitboxComponent(86.0f, 65.0f, 86.0f, 110.0f); //86 i 110
 	movement_component->SetHitBox(hitbox_component.get());
 }
 

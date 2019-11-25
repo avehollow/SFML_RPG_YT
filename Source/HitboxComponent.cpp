@@ -54,8 +54,7 @@ void HitboxComponent::SetPosition(const sf::Vector2f& pos)
 
 sf::FloatRect HitboxComponent::GetNextPosition(const sf::Vector2f& velocity)
 {
-	//Dont work because in this part of we dont calculate the direction of moving ? Nooo?
-	//HLOG  NEED multiply by frame_time
+	//AVE  NEED multiply by frame_time
 	next_position.left = hitbox.getPosition().x + velocity.x ;
 	next_position.top  = hitbox.getPosition().y + velocity.y ;
 

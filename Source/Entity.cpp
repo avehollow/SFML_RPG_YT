@@ -15,7 +15,7 @@ void Entity::SetTexture(sf::Texture* texture)
 		this->texture = texture;
 }
 
-const sf::Vector2f& Entity::GetPosition()
+sf::Vector2f Entity::GetPosition()
 {
 	if (hitbox_component)
 		return hitbox_component->GetPosition();
@@ -27,12 +27,14 @@ const sf::Vector2f& Entity::GetPosition()
 	
 }
 
-const sf::FloatRect Entity::GetHitboxBounds()
+sf::FloatRect Entity::GetHitboxBounds()
 {
 	if (hitbox_component)
 	{
 		return hitbox_component->GetGlobalBounds();
 	}
+	else
+		return sf::FloatRect{};
 }
 
 void Entity::move(const float& frame_time, float dir_x, float dir_y)
