@@ -167,7 +167,17 @@ void GameState::Render(sf::RenderWindow* target)
 	target->setView(view);
 
 	map.Render(target, player.get());
-	player->Render(target);
+	//player->Render(target);
+
+	// The player character is rendered by the map
+	// Because some objects are placed above the player
+	// i.e  1 layer --> grass 
+	//		2 layer --> road , 
+	//	    RENDER PLAYER 
+	//	    3 layer --> tree
+
+
+
 	if (bPause)
 	{
 		target->setView(window->getDefaultView());

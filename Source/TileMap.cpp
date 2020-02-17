@@ -180,15 +180,20 @@ void TileMap::Render(sf::RenderWindow* window, Entity* entity)
 	////
 	// Tiles
 	////
+	sf::Vector2f player_position;
 	if (entity)
-	{
+		player_position = entity->GetPosition();
+
+	else
+		player_position = static_cast<sf::Vector2f>(sf::Mouse::getPosition(*window));
+	
 
 
-		fromX = entity->GetPosition().x / size_grid - 10;
-		fromY = entity->GetPosition().y / size_grid - 10;
+		fromX = player_position.x / size_grid - 10;  // Do not render everything
+		fromY = player_position.y / size_grid - 10;  // This values seems be okey
 
-		toX = entity->GetPosition().x / size_grid + 15;
-		toY = entity->GetPosition().y / size_grid + 10;
+		toX = player_position.x / size_grid + 15;    // This values seems fine
+		toY = player_position.y / size_grid + 10;    // This values seems be okey
 
 
 		if (fromX < 0)
@@ -203,41 +208,37 @@ void TileMap::Render(sf::RenderWindow* window, Entity* entity)
 		if (toY > map[0].size())
 			toY = map[0].size();
 
-		//std::cout << "\n " << fromX << " " << toX;
-		//std::cout << "\n " << fromY << " " << toY;
-		//system("cls");
+		// std::cout << "\n " << fromX << " " << toX;
+		// std::cout << "\n " << fromY << " " << toY;
+		// system("cls");
 
 		for (size_t x = fromX; x < toX; x++)
 		{
 			for (size_t y = fromY; y < toY; y++)
 			{
-				for (size_t i = 0; i < 3; i++)
+				for (size_t i = 0; i < 2; i++)
 				{
 					map[x][y][i]->Render(window);
 				}
 			}
 		}
-	}
-	else
-	{
-		for (const auto& column:map)
+
+		if (entity)	entity->Render(window);
+
+		
+
+		for (size_t x = fromX; x < toX; x++)
 		{
-			for (const auto& row : column)
+			for (size_t y = fromY; y < toY; y++)
 			{
-				for (const auto& tile : row)
+				for (size_t i = 2; i < layers; i++)
 				{
-					if (tile.get())
-					{
-						tile->Render(window);
-					}
+					map[x][y][i]->Render(window);
 				}
 			}
 		}
-	}
-
-
-
 }
+
 
 void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 {
@@ -316,7 +317,7 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 				
 				if (map[x][y][i]->intersects(next_position))
 				{
-					map[x][y][i]->shape.setFillColor(sf::Color::Red);
+					//map[x][y][i]->shape.setFillColor(sf::Color::Red);
 
 
 

@@ -10,7 +10,7 @@ private:
 
 	std::vector<
 		std::vector<
-			std::vector<std::unique_ptr<Tile>> >> map;
+				std::vector< std::unique_ptr<Tile>> >> map;
 
 	size_t size_grid = 100;
 	size_t size_x    = 10;
