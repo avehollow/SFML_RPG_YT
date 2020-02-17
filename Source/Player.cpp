@@ -11,7 +11,9 @@ Player::Player(float posX, float posY,  sf::Sprite* sprite, sf::Texture* texture
 
 	if (texture)
 		this->sprite->setTexture(*texture);
-	CreateMovementComponent(550.0f, 300.0f, 4.0f);
+
+	// Set deceleration = 1000.0f to achieve slip effects 
+	CreateMovementComponent(550.0f, 15000.0f, 2000.0f);
 
 	/*
 		B³¹d:

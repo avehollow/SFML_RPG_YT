@@ -35,7 +35,7 @@ public:
 	virtual void StopVelocity();
 	virtual void StopVelocityX();
 	virtual void StopVelocityY();
-	virtual const sf::Vector2u GetGridPosition(size_t grid_size)const;
+	virtual const sf::Vector2i GetGridPosition(int grid_size)const;
 
 public:
 	Entity();

@@ -42,13 +42,13 @@ MovementComponent::MOVE_STATE MovementComponent::GetMoveState()
 
 }
 
-void MovementComponent::Move(float dir_x, float dir_y)
+void MovementComponent::Move(const float& frame_time,float dir_x, float dir_y)
 {
 	dir_x = std::clamp(dir_x, -1.0f, 1.0f);
 	dir_y = std::clamp(dir_y, -1.0f, 1.0f);
 
-	velocity.x += dir_x * acceleration;
-	velocity.y += dir_y * acceleration;
+	velocity.y += dir_y * acceleration* frame_time;
+	velocity.x += dir_x * acceleration* frame_time;
 	
 	velocity.x = std::clamp(velocity.x, -max_velocity, max_velocity);
 	velocity.y = std::clamp(velocity.y, -max_velocity, max_velocity);
@@ -70,22 +70,22 @@ void MovementComponent::Update(const float& frame_time)
 	
 	if (velocity.x > 0.0f)
 	{
-		velocity.x -= deceleration;
+		velocity.x -= deceleration * frame_time;
 		velocity.x = std::clamp(velocity.x, 0.0f, max_velocity);
 	}
 	if (velocity.x < 0.0f)
 	{
-		velocity.x += deceleration;
+		velocity.x += deceleration * frame_time;
 		velocity.x = std::clamp(velocity.x, -max_velocity, 0.0f);
 	}
 	if (velocity.y > 0.0f)
 	{
-		velocity.y -= deceleration;
+		velocity.y -= deceleration * frame_time;
 		velocity.y = std::clamp(velocity.y, 0.0f, max_velocity);
 	}
 	if (velocity.y < 0.0f)
 	{
-		velocity.y += deceleration;
+		velocity.y += deceleration * frame_time;
 		velocity.y = std::clamp(velocity.y, -max_velocity, 0.0f);
 	}
 

@@ -65,7 +65,7 @@ public:
 
 	MOVE_STATE GetMoveState();
 
-	void Move(float dir_x, float dir_y);
+	void Move(const float& frame_time,float dir_x, float dir_y);
 	void Update(const float& frame_time);
 
 

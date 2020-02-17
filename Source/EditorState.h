@@ -28,7 +28,8 @@ private:
 	bool  bShowCollision = false;
 
 	sf::View view;
-	float camera_speed = 8500;
+
+	float camera_speed = 85000;
 public:
 	EditorState(StateData* state_data);
 	virtual ~EditorState();

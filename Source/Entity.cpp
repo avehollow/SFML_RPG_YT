@@ -45,7 +45,7 @@ void Entity::move(const float& frame_time, float dir_x, float dir_y)
 
 	if (movement_component.get())
 	{
-		movement_component->Move(dir_x, dir_y);
+		movement_component->Move(frame_time,dir_x, dir_y);
 	}
 
 }
@@ -100,24 +100,24 @@ void Entity::StopVelocityY()
 		movement_component->StopVelocityY();
 }
 
-const sf::Vector2u Entity::GetGridPosition(size_t grid_size) const
+const sf::Vector2i Entity::GetGridPosition(int grid_size) const
 {
 	if (hitbox_component)
 	{
-		return sf::Vector2u(
-			(size_t)hitbox_component->GetPosition().x / grid_size,
-			(size_t)hitbox_component->GetPosition().y / grid_size
+		return sf::Vector2i(
+			(int)hitbox_component->GetPosition().x / grid_size,
+			(int)hitbox_component->GetPosition().y / grid_size
 		);
 	}
 
 	if (sprite)
 	{
-		return sf::Vector2u(
-			(size_t)sprite->getPosition().x / grid_size,
-			(size_t)sprite->getPosition().y / grid_size
+		return sf::Vector2i(
+			(int)sprite->getPosition().x / grid_size,
+			(int)sprite->getPosition().y / grid_size
 			);
 	}
-	return sf::Vector2u();
+	return sf::Vector2i();
 }
 
 Entity::Entity()
