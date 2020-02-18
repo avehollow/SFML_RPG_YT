@@ -3,7 +3,7 @@
 #include "MovementComponent.h"
 #include "AnimationComponent.h"
 #include "HitboxComponent.h"
-
+#include "AttributeComponent.h"
 
 class Entity
 {
@@ -17,6 +17,7 @@ public:
 	unique_ptr<MovementComponent>  movement_component;
 	unique_ptr<AnimationComponent> animation_component;
 	unique_ptr<HitboxComponent>    hitbox_component;
+	unique_ptr<AttributeComponent> attribute_component;
 
 public:
 	virtual sf::Vector2f	    GetPosition();
@@ -28,6 +29,7 @@ public:
 	virtual void				CreateMovementComponent(float max_velocity, float acceleraton, float deceleration);
 	virtual void				CreateAnimationComponent(sf::Texture* sheet);
 	virtual void				CreateHitboxComponent(float offset_x, float offset_y, float width, float height);
+	virtual void				CreateAttributeComponent(int level);
 	sf::FloatRect GetNextPostionBounds(const float& frame_time) const;
 	sf::FloatRect GetSpriteGlobalBounds() const;
 

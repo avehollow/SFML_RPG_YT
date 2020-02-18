@@ -37,6 +37,9 @@ Player::Player(float posX, float posY,  sf::Sprite* sprite, sf::Texture* texture
 
 	CreateHitboxComponent(86.0f, 65.0f, 86.0f, 110.0f); //86 i 110
 	movement_component->SetHitBox(hitbox_component.get());
+
+
+	CreateAttributeComponent(1);
 }
 
 Player::~Player()
@@ -55,6 +58,16 @@ void Player::Update(const float& frame_time)
 		hitbox_component->Update();
 
 	UpdateAnimation(frame_time);
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+	{
+		attribute_component->GainExp(30);
+	}
+
+
+	attribute_component->Update();
+	system("cls");
+	std::cout<<attribute_component->DebugPrint();
 }
 
 void Player::Render(sf::RenderWindow* window)

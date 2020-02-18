@@ -71,6 +71,11 @@ void Entity::CreateHitboxComponent(float offset_x, float offset_y, float width, 
 	hitbox_component = make_unique<HitboxComponent>(sprite, offset_x, offset_y, width, height);
 }
 
+void Entity::CreateAttributeComponent(int level)
+{
+	attribute_component = make_unique<AttributeComponent>(level) ;
+}
+
 sf::FloatRect Entity::GetNextPostionBounds(const float &frame_time) const
 {
 
