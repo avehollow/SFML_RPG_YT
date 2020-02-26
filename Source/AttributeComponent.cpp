@@ -18,7 +18,8 @@ void AttributeComponent::CalculateNextExpThreshold()
 	// wielomian 3 stopnia!! zobacz wykres
 	// wykres: (50 / 3) * (x^3 - 6 * x^2) + (x*17) - 12)
 	// proponuje e^log e^x
-	exp_to_next_level = (50 / 3) * (pow(level, 3) - 6 * pow(level, 2) + (level * 17ll) - 12);
+	// ale to dzia³a 
+	exp_to_next_level = (50 / 3) * (pow(level + 1, 3) - 6 * pow(level + 1, 2) + ((level + 1) * 17ll) - 12);
 }
 
 void AttributeComponent::Update()
@@ -35,7 +36,7 @@ void AttributeComponent::Update()
 		if (!(level%5))
 		{
 			//hp_max += (rand()%250) + 250ll;		// random number [250;500]
-			hp_max += 500ll;
+			hp_bonus += 250ll;
 		}
 		CalculateNextExpThreshold();
 		this->UpdateAttribute();
@@ -90,13 +91,16 @@ std::string AttributeComponent::DebugPrint() const
 		<< "Experience:"    << experience		   << "\n"
 		<< "ExpToNextLvl:"  << exp_to_next_level   << "\n"
 		<< "AttributePoint:"<< attribute_points    << "\n"
+		<< "Hp_Current:"    << hp_current		   << "\n"
+		<< "Press E to gain experience "		   << "\n"
+		<< "Press Q to get damage "				   << "\n"
 		;
 	return ss.str();
 }
 
 void AttributeComponent::UpdateAttribute()
 {
-	hp_max = (vitality * 9ll + strength * 5ll) + 100ll;
+	hp_max = (vitality * 9ll + strength * 5ll) + 100ll + hp_bonus;
 	hp_current = hp_max;
 
 	mana_max = (intelligence * 15ll) + 100ll;

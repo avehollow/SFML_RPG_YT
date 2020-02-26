@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameState.h"
 #include "SettingsState.h"
+#include "PlayerGUI.h"
 
 //HACK Why i sent suported_keys to State.h if i in this place fill map keybinds? After this i dont need sent supported_keys to State
 GameState::GameState(StateData* state_data)
@@ -11,7 +12,8 @@ GameState::GameState(StateData* state_data)
 	this->InitTextures();
 
 	this->InitSprites();
-	player = make_shared<Player>(20, 20, &sprites["PLAYER"], &textures["PLAYER"]);
+	player    = make_shared<Player>(20, 20, &sprites["PLAYER"], &textures["PLAYER"]);
+	playerGUI = make_shared<PlayerGUI>(player.get(), window.get());
 
 	this->InitPauseMenu();
 
@@ -156,17 +158,19 @@ void GameState::Update(const float& frame_time)
 		//AVE VERY IMPORTANT!!! Check collision before update player
 		map.UpdateCollision(player.get(),frame_time);
 		player->Update(frame_time);
+		//HLOG In which situation playerGUI->update should be called ??;
+		playerGUI->Update(frame_time);
 	}
 }
 
-void GameState::Render(sf::RenderWindow* target)
+void GameState::Render(sf::RenderWindow* window)
 {
-	if (!target)
+	if (!window)
 		return;
 	
-	target->setView(view);
+	window->setView(view);
 
-	map.Render(target, player.get());
+	map.Render(window, player.get());
 	//player->Render(target);
 
 	// The player character is rendered by the map
@@ -176,11 +180,13 @@ void GameState::Render(sf::RenderWindow* target)
 	//	    RENDER PLAYER 
 	//	    3 layer --> tree
 
-
+	// Render Player GUI
+	window->setView(window->getDefaultView());
+	playerGUI->Render(window);
 
 	if (bPause)
 	{
-		target->setView(window->getDefaultView());
-		pause_menu.Render(target);
+		window->setView(window->getDefaultView());
+		pause_menu.Render(window);
 	}
 }

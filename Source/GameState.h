@@ -12,6 +12,8 @@ private:
 
 	PauseState pause_menu;
 	shared_ptr<Player> player;
+	// Foward declaration works :)
+	shared_ptr < class PlayerGUI > playerGUI;
 
 	sf::Texture texture_sheet;
 	TileMap map;
@@ -35,6 +37,6 @@ public:
 
 	void UpdateInput(const float& frame_time)		  override;
 	void Update(const float& frame_time)			  override;
-	void Render(sf::RenderWindow* target = nullptr)	  override;
+	void Render(sf::RenderWindow* window = nullptr)	  override;
 };
 

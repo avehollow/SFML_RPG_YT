@@ -26,6 +26,7 @@ public:
 
 	long long hp_current		= 100;
 	long long hp_max			= 100;
+	long long hp_bonus			= 0;
 
 	long long mana_current		= 100;
 	long long mana_max			= 100;

@@ -63,6 +63,11 @@ void Player::Update(const float& frame_time)
 	{
 		attribute_component->GainExp(30);
 	}
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	{
+		attribute_component->hp_current= attribute_component->hp_current- 0.01f;
+	}
 
 
 	attribute_component->Update();
