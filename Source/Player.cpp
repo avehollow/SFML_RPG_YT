@@ -35,7 +35,7 @@ Player::Player(float posX, float posY,  sf::Sprite* sprite, sf::Texture* texture
 	animation_component->AddAnimation("ATTACK",       this->texture, 0.05f,  4, 2, 13, 2, 384, 192);
 	//animation_component->AddAnimation("ATTACK_FAST",  this->texture, 0.00f,  4, 2, 13, 2, 384, 192);
 
-	CreateHitboxComponent(86.0f, 65.0f, 86.0f, 110.0f); //86 i 110
+	CreateHitboxComponent(86.0f, 65.0f, 86.0f, 100.0f); //86 i 110
 	movement_component->SetHitBox(hitbox_component.get());
 
 
@@ -61,12 +61,17 @@ void Player::Update(const float& frame_time)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
 	{
-		attribute_component->GainExp(30);
+		//attribute_component->GainExp(30);
+		experience() += 30;
 	}
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 	{
-		attribute_component->hp_current= attribute_component->hp_current- 0.01f;
+	
+		hp_current() = std::max(
+								  hp_current() -= 1.0f, //Trick with -=
+								  0ll
+							   );
 	}
 
 

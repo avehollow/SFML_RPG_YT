@@ -319,8 +319,19 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 				{
 					//map[x][y][i]->shape.setFillColor(sf::Color::Red);
 
+					// AVE VERY BAD SYSTEM COLLISION 
+					// Current collision system work in this way:
+					//	 At first it is checked if the block is collided with player
+					//			this code ---> if (map[x][y][i]->intersects(next_position))
+					//			Note: I dont know if "next_position" is right calculated
+					//	 Next, code below decided which side player/enitity collided with block
+					//			Note: This my implementation have bug and dont work excellent
+					//          Because if we change tile size, collision doesnt work excellent
+					//
+					//	Potential problem solution: Create new project from scratch
+					//  This project is too big and have very nasty_nieprzyjemny code   
 
-
+					// HLOG COLLISION SYSTEM HERE
 					// bottom collision (ENTITY BOTTOM !!)
 					if (player_bounds.top < wall_bounds.top
 						&& player_bounds.top + player_bounds.height < wall_bounds.top +wall_bounds.height
@@ -343,7 +354,7 @@ void TileMap::UpdateCollision(Entity* entity,const float& frame_time)
 
 
 					// right (ENTITY RIGHT !!)
-					if (player_bounds.left < wall_bounds.left
+					 if (player_bounds.left < wall_bounds.left
 						&& player_bounds.left + player_bounds.width < wall_bounds.left + wall_bounds.width
 						&& player_bounds.top < wall_bounds.top + wall_bounds.height
 						&& player_bounds.top + player_bounds.height > wall_bounds.top)

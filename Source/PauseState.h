@@ -22,6 +22,11 @@ public:
 	}
 
 	bool IsButtonPressed(std::string_view key);
+
+	/* The pause menu has constant dimensions, this mean -> it is always in the center of the window
+	*
+	*	@param			float rel_y			Indicate_wskazywac the position of the button relative to the pause menu window
+	*/
 	void AddButton(std::string_view key, float rel_y, std::string_view text);
 
 	void Update(sf::Vector2f mos_pos, const float& frame_time); 

@@ -48,7 +48,7 @@ public:
 	void Update();
 	void ResetAttribute();
 	void AddAttribute(ATTRIBUTE att);
-	inline void GainExp(int exp) // Wszystkie funkcje z definicja w ciele klasy s¹ inline wiêc nie potrzeba specyfikatora inline ale mniejsza o to :D
+	inline void GainExp(int exp) // Wszystkie funkcje z definicji w ciele klasy s¹ inline wiêc nie potrzeba specyfikatora inline ale mniejsza o to :D
 	{
 		experience += exp;
 	}

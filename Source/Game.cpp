@@ -3,7 +3,9 @@
 
 
 Game::Game()
-	: state_data({ 51,51,100.0f,main_window,&supported_keys,&states }) //AVE Klasa agregat
+	// int grid_size_x;  || int grid_size_y; || float tile_size;
+	// HLOG Here you can change size of tile
+	: state_data({ 51,51,64.0f,main_window,&supported_keys,&states }) //AVE Klasa agregat
 {
 
 }
@@ -19,7 +21,6 @@ void Game::Update()
 	
 	if (!states.empty()) 
 	{
-	
 		states.top()->Update(frame_time);
 
 		if (states.top()->GetQuitFlag())

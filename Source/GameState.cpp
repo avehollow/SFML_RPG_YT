@@ -22,6 +22,8 @@ GameState::GameState(StateData* state_data)
 	map.LoadFromFile();
 
 	this->InitView();
+
+	//playerGUI->Adjust();
 }
 
 GameState::~GameState()
@@ -84,7 +86,25 @@ void GameState::UpdatePauseMenuInput()
 void GameState::UpdateView()
 {
 	// AVE Use intengers values to move view because using float causes flickering tile textures!
-	view.setCenter(std::floor(player->GetPosition().x), std::floor(player->GetPosition().y));
+	// AVE Very nice mechanic!!
+	// The player pawn moves the camera, but also the mouse can move the camera a little 
+
+	// Kamera pod¹¿a za pozycj¹ gracza
+	// Chcemy aby kamere równie¿ nieznacznie porusza³a myszka (ruch myszk¹)
+	// W tym celu do pozycji gracza dodajemy pozycje myszki z tym ¿e
+	// Domyœlna pozycja myszy to lewy górny róg czyli punkt (0,0)
+	// Przesuwaj¹c j¹ np. na œrodek ekranu na postaæ gracza otrzymamy wspó³rzêdne myszki równe (windows->getSize().x, windows->getSize().y)  czyli np. (960,540)
+	// Je¿eli dodamy do wspó³rzêdnych gracza wektor (960,540) to kamera przesunie siê o ten wektor (prawdopodobnie gracza nawet widaæ nie bedzie).
+	// Co jest niew³aœciwe poniewa¿ chcemy aby gracz by³ na œrodku i mysz równie¿ 
+	// Dlatego odejmujemy po³owe rozmiarów okna od pozycji myszy co skutuje tym ¿e
+	// !! Naje¿dzaj¹c myszk¹ na gracza, mysz a raczej jej pozycja jest na œrodku okna !!
+	// I oto nam chodzi³o
+	// Kolejno dzielimy otrzyman¹ w ten spób pozycje myszy przez 5.0f aby ograniczyæ ruch mysz¹
+	// Je¿eli chcemy aby myszka bardziej wp³ywa³a na kamera b¹dŸ mniej to edytujemy wartoœæ / 5.0f
+	// Musz¹ byæ rzutowania na float!!!
+	view.setCenter(
+		(player->GetPosition().x + (((float)this->mouse_pos_window.x - (float)window->getSize().x / 2) / 5.0f)), 
+		(player->GetPosition().y + (((float)this->mouse_pos_window.y - (float)window->getSize().y / 2) / 5.0f)));
 }
 
 void GameState::EndState()

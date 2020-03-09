@@ -21,7 +21,7 @@ MainMenu::~MainMenu()
 
 void MainMenu::InitBackground()
 {
-	if (background_t.loadFromFile("Resource/Image/Background/background.png"))
+	if (background_t.loadFromFile("Resource/Image/Background/background2.png"))
 	{
 		background_s.setSize(sf::Vector2f(window->getSize()));
 		background_s.setTexture(&background_t);
@@ -30,6 +30,10 @@ void MainMenu::InitBackground()
 	{
 		std::cout << "\nERROR !\nCANT LOAD TEXTURE BACKGROUND\n";
 	}
+
+	blackarea.setFillColor(sf::Color(10,10,10,225));
+	blackarea.setPosition(250, 0);
+	blackarea.setSize(sf::Vector2f(350, window->getSize().y));
 }
 
 void MainMenu::InitFonts()
@@ -43,7 +47,7 @@ void MainMenu::InitFonts()
 
 void MainMenu::InitButtons()
 {
-	buttons["New Game"]		  = make_unique<gui::Button>(120, 320, 150, 50, "New Game",		 &this->font_dosis);
+	buttons["New Game"]       = make_unique<gui::Button>(120, 320, 150, 50, "New Game",      &this->font_dosis);
 	buttons["Options"]        = make_unique<gui::Button>(120, 420, 150, 50, "Options",       &this->font_dosis);
 	buttons["Editor"]         = make_unique<gui::Button>(120, 520, 150, 50, "Editor",        &this->font_dosis);
 	buttons["Quit"]			  = make_unique<gui::Button>(120, 720, 150, 50, "Quit",			 &this->font_dosis);
@@ -51,10 +55,27 @@ void MainMenu::InitButtons()
 
 void MainMenu::UpdateButtons(const float& frame_time)
 {
-	buttons["New Game"]->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.4f);
-	buttons["Options"] ->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.50f);
-	buttons["Editor"]  ->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.60f);
-	buttons["Quit"]    ->SetPosition(window->getSize().x * 0.1f, window->getSize().y * 0.90f);
+	blackarea.setPosition(window->getSize().x * 0.10f, 0);
+	blackarea.setSize(sf::Vector2f(350 * (float)window->getSize().x / 1920.f, window->getSize().y));
+
+	//HLOG Maybe create better solution to calculate right scale, because currently depend on 1920px and 1080px ?
+	buttons["New Game"]->SetTextScale((float)window->getSize().x /1920.f, (float)window->getSize().y / 1080.f);
+	buttons["Options"] ->SetTextScale((float)window->getSize().x /1920.f, (float)window->getSize().y / 1080.f);
+	buttons["Editor"]  ->SetTextScale((float)window->getSize().x /1920.f, (float)window->getSize().y / 1080.f);
+	buttons["Quit"]    ->SetTextScale((float)window->getSize().x /1920.f, (float)window->getSize().y / 1080.f);
+
+	//HLOG I need both function to UpdateButtons (SetPostion and SetScale)
+	// After some updates
+	// At this time, we need to separatelty adjust the size of the text and shape button
+	buttons["New Game"]->SetSizeShape(150 * (float)window->getSize().x / 1920.f,50* (float)window->getSize().y / 1080.f);
+	buttons["Options"] ->SetSizeShape(150 * (float)window->getSize().x / 1920.f,50* (float)window->getSize().y / 1080.f);
+	buttons["Editor"]  ->SetSizeShape(150 * (float)window->getSize().x / 1920.f,50* (float)window->getSize().y / 1080.f);
+	buttons["Quit"]	   ->SetSizeShape(150 * (float)window->getSize().x / 1920.f,50* (float)window->getSize().y / 1080.f);
+
+	buttons["New Game"]->SetPosition((blackarea.getPosition().x + (blackarea.getSize().x / 2)) - (buttons["New Game"]->GetSize().x / 2) /* or use funnction -> per2pixX(10.0f)*/ , window->getSize().y * 0.3f);
+	buttons["Options"] ->SetPosition((blackarea.getPosition().x + (blackarea.getSize().x / 2)) - (buttons["Options"] ->GetSize().x / 2) /* or use funnction -> per2pixX(10.0f)*/ , window->getSize().y * 0.40f);
+	buttons["Editor"]  ->SetPosition((blackarea.getPosition().x + (blackarea.getSize().x / 2)) - (buttons["Editor"]  ->GetSize().x / 2) /* or use funnction -> per2pixX(10.0f)*/ , window->getSize().y * 0.50f);
+	buttons["Quit"]    ->SetPosition((blackarea.getPosition().x + (blackarea.getSize().x / 2)) - (buttons["Quit"]    ->GetSize().x / 2) /* or use funnction -> per2pixX(10.0f)*/ , window->getSize().y * 0.70f);
 
 
 
@@ -136,6 +157,7 @@ void MainMenu::Update(const float& frame_time)
 void MainMenu::Render(sf::RenderWindow* window)
 {
 	this->window->draw(background_s);
+	this->window->draw(blackarea);
 	this->RenderButtons(window);
 
 

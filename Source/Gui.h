@@ -74,7 +74,13 @@ namespace gui
 		}
 
 		void SetPosition(float x, float y);
+		// Scale Shape and Text!
+		void SetScale(float x, float y);
+		// Size Shape
+		void SetSizeShape(float x, float y);
+		void SetTextScale(float x, float y);
 		sf::Vector2f GetPosition()const;
+		sf::Vector2f GetSize()const;
 	};
 
 	class DropList

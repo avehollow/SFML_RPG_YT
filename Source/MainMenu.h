@@ -7,6 +7,8 @@ private:
 	sf::RectangleShape background_s;
 	sf::Texture		   background_t;
 
+	sf::RectangleShape blackarea;
+
 	std::map<string, unique_ptr<gui::Button>> buttons;
 public:
 	MainMenu(StateData* state_data);

@@ -112,9 +112,31 @@ namespace gui
 		);
 	}
 
+	void Button::SetScale(float x, float y)
+	{
+		shape.setScale(x, y);
+		text.setScale(x, y);
+
+	}
+
+	void Button::SetSizeShape(float x, float y)
+	{
+		shape.setSize(sf::Vector2f(x, y));
+	}
+
+	void Button::SetTextScale(float x, float y)
+	{
+		text.setScale(x, y);
+	}
+
 	sf::Vector2f Button::GetPosition() const
 	{
 		return sf::Vector2f(shape.getPosition());
+	}
+
+	sf::Vector2f Button::GetSize() const
+	{
+		return sf::Vector2f(shape.getSize());
 	}
 
 

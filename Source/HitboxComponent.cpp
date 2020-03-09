@@ -55,6 +55,7 @@ void HitboxComponent::SetPosition(const sf::Vector2f& pos)
 sf::FloatRect HitboxComponent::GetNextPosition(const sf::Vector2f& velocity)
 {
 	//AVE  NEED multiply by frame_time
+	// Solved
 	next_position.left = hitbox.getPosition().x + velocity.x ;
 	next_position.top  = hitbox.getPosition().y + velocity.y ;
 

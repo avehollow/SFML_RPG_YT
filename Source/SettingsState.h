@@ -29,6 +29,7 @@ private:
 
 	Settings current_setting;
 	
+
 public:
 	SettingsState(StateData* state_data);
 	virtual ~SettingsState();

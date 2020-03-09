@@ -21,6 +21,18 @@ State::~State()
 	std::cout << "Destructor State::~State()\n";
 }
 
+
+float State::per2pixX(float percent)
+{
+
+	return std::floor(window->getSize().x * (percent / 100.f));
+}
+
+float State::per2pixY(float percent)
+{
+	return std::floor(window->getSize().y * (percent / 100.f));
+}
+
 bool State::KeyTime()
 {
 	if (key_time >= key_time_max)

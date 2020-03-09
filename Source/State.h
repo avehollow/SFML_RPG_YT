@@ -58,6 +58,27 @@ public:
 		return bQuit;
 	};
 
+	
+	/* Converts a pecentage value to pixels relative to the current resolution.
+	*
+	* @param			float percent		The percentage value
+	*
+	*
+	* @return			float				The calculated pixel value
+	*/
+	float per2pixX(float percent);
+
+	
+	/* Converts a pecentage value to pixels relative to the current resolution.
+	*
+	* @param			float percent		The percentage value
+	*
+	*
+	* @return			float				The calculated pixel value
+	*/
+	float per2pixY(float percent);
+
+
 	virtual bool KeyTime();
 	virtual void UpdateKeyTime(const float& frame_time);
 	virtual void UpdateMousePos(sf::View* view = nullptr);
